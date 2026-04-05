@@ -1,1 +1,539 @@
-<html></html>
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kampoeng Gadget - Mitra Teknologi Anda</title>
+    <meta name="description"
+        content="PT Kampoeng Gadget Multimedia Com spesialisasi gaming dan multimedia - mitra terbaik untuk segala kebutuhan teknologi Anda di Bukittinggi.">
+    <meta name="keywords" content="Kampoeng Gadget, PC Gaming, Komputer, Teknologi, Multimedia, Bukittinggi">
+
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { dark: '#111111', darkest: '#080808', gray: '#333333', red: '#CC0000', white: '#ffffff' }
+                    },
+                    fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- CDN: Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+    <!-- CDN: GSAP + ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <!-- CDN: ScrollReveal -->
+    <script src="https://unpkg.com/scrollreveal@4.0.9/dist/scrollreveal.min.js"></script>
+</head>
+
+<body data-page="home" class="bg-brand-darkest text-brand-white antialiased overflow-x-hidden">
+
+    <!-- ===================================================
+       NAVIGATION
+  ==================================================== -->
+    <nav id="main-nav" class="fixed top-0 w-full z-50 transition-all duration-300 border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-5 lg:px-8">
+            <div class="flex justify-between items-center h-[72px]">
+
+                <!-- Logo -->
+                <a href="index.html" class="flex items-center gap-3 flex-shrink-0">
+                    <img src="img/KampoengGadged-Logo.png" alt="Logo Kampoeng Gadget" class="h-9 w-auto">
+                    <div class="hidden sm:flex flex-col leading-tight">
+                        <span class="font-bold text-[15px] tracking-wide text-white">Kampoeng Gadget</span>
+                        <span class="text-[10px] text-brand-red font-semibold tracking-widest uppercase">Multimedia
+                            Com</span>
+                    </div>
+                </a>
+
+                <!-- Desktop Links -->
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="index.html"
+                        class="nav-link text-brand-red border-b-2 border-brand-red pb-0.5 text-sm font-semibold">Homepage</a>
+                    <a href="about.html"
+                        class="nav-link text-white/70 hover:text-white text-sm font-medium transition-colors">About
+                        Us</a>
+                    <a href="products.html"
+                        class="nav-link text-white/70 hover:text-white text-sm font-medium transition-colors">Products
+                        &amp; Services</a>
+                    <a href="portfolio.html"
+                        class="nav-link text-white/70 hover:text-white text-sm font-medium transition-colors">Portfolio</a>
+                    <a href="contact.html"
+                        class="px-5 py-2.5 text-sm font-bold text-white bg-brand-red rounded-full btn-shimmer shadow-lg shadow-brand-red/25 hover:opacity-90 transition-opacity">
+                        Hubungi Kami
+                    </a>
+                </div>
+
+                <!-- Hamburger -->
+                <button id="mobile-menu-btn" class="md:hidden p-2 text-white/70 hover:text-white transition-colors"
+                    aria-label="Buka menu navigasi">
+                    <i data-lucide="menu" id="menu-icon" class="w-6 h-6"></i>
+                    <i data-lucide="x" id="close-icon" class="w-6 h-6 hidden"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Drawer -->
+        <div id="mobile-menu" class="hidden md:hidden bg-brand-darkest border-t border-white/10">
+            <div class="px-5 py-5 flex flex-col gap-2">
+                <a href="index.html"
+                    class="block px-4 py-3 text-sm font-semibold text-brand-red bg-white/5 rounded-xl">Homepage</a>
+                <a href="about.html"
+                    class="block px-4 py-3 text-sm font-medium text-white/70 hover:bg-white/5 hover:text-white rounded-xl transition-colors">About
+                    Us</a>
+                <a href="products.html"
+                    class="block px-4 py-3 text-sm font-medium text-white/70 hover:bg-white/5 hover:text-white rounded-xl transition-colors">Products
+                    &amp; Services</a>
+                <a href="portfolio.html"
+                    class="block px-4 py-3 text-sm font-medium text-white/70 hover:bg-white/5 hover:text-white rounded-xl transition-colors">Portfolio</a>
+                <a href="contact.html"
+                    class="mt-2 block px-4 py-3 text-sm font-bold text-center text-white bg-brand-red rounded-xl btn-shimmer">Hubungi
+                    Kami</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ===================================================
+       HERO — Gradient Bars + Full Viewport
+  ==================================================== -->
+    <section class="relative h-100dvh w-full flex flex-col items-center justify-center overflow-hidden noise-overlay">
+
+        <!-- Animated bar background -->
+        <div id="gradient-bars-container" class="absolute inset-0 z-0 flex items-end" style="opacity:0.35"></div>
+
+        <!-- Vignette overlays -->
+        <div
+            class="absolute inset-0 z-[1] bg-gradient-to-t from-brand-darkest via-brand-darkest/30 to-transparent pointer-events-none">
+        </div>
+        <div
+            class="absolute inset-0 z-[1] bg-gradient-to-r from-brand-darkest/60 via-transparent to-brand-darkest/60 pointer-events-none">
+        </div>
+
+        <!-- Hero content -->
+        <div
+            class="relative z-10 w-full max-w-5xl mx-auto px-5 text-center hero-content flex flex-col items-center justify-center gap-6 pt-20">
+
+            <!-- Badge -->
+            <span id="hero-badge"
+                class="badge-pulse inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-widest text-brand-red border border-brand-red/40 bg-brand-red/10">
+                <i data-lucide="zap" class="w-3.5 h-3.5"></i>
+                Mitra Teknologi Anda
+            </span>
+
+            <!-- Headline -->
+            <h1 id="hero-headline"
+                class="text-[clamp(2.5rem,8vw,6rem)] font-black leading-[1.05] tracking-tight text-balance">
+                Mitra Terbaik Untuk<br>
+                <span
+                    class="text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-red-500 to-red-700">Kebutuhan
+                    Teknologi</span>
+            </h1>
+
+            <!-- Sub -->
+            <p id="hero-sub"
+                class="max-w-2xl text-[clamp(1rem,2.5vw,1.25rem)] text-white/60 font-medium leading-relaxed text-balance">
+                Kampoeng Gadget menggabungkan keahlian teknis dan pengetahuan teknologi untuk memberikan solusi yang
+                efektif, efisien, dan terbaik bagi seluruh pelanggan.
+            </p>
+
+            <!-- CTA -->
+            <div id="hero-cta" class="flex flex-col sm:flex-row gap-3 w-full justify-center">
+                <a href="#layanan"
+                    class="group inline-flex items-center justify-center gap-2.5 px-7 py-3.5 font-bold text-white rounded-full btn-shimmer shadow-xl shadow-brand-red/30 hover:opacity-90 transition-opacity">
+                    <span>Lihat Layanan</span>
+                    <i data-lucide="arrow-down" class="w-4 h-4 group-hover:translate-y-1 transition-transform"></i>
+                </a>
+                <a href="contact.html"
+                    class="inline-flex items-center justify-center gap-2.5 px-7 py-3.5 font-bold text-white/80 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 hover:text-white hover:border-white/25 transition-all">
+                    Konsultasi Gratis
+                </a>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- ===================================================
+       MARQUEE TICKER
+  ==================================================== -->
+    <div class="border-y border-white/5 bg-brand-darkest/80 py-4">
+        <div class="marquee-wrapper">
+            <div class="marquee-track" id="marquee-track">
+                <!-- Injected 2x by JS for infinite loop -->
+                <span class="marquee-item"><span class="marquee-dot"></span>Gaming Optimal</span>
+                <span class="marquee-item"><span class="marquee-dot"></span>Professional Workstation</span>
+                <span class="marquee-item"><span class="marquee-dot"></span>Multimedia Setup</span>
+                <span class="marquee-item"><span class="marquee-dot"></span>Penjualan Perangkat</span>
+                <span class="marquee-item"><span class="marquee-dot"></span>Layanan Teknisi</span>
+                <span class="marquee-item"><span class="marquee-dot"></span>Konsultasi Sistem</span>
+                <span class="marquee-item"><span class="marquee-dot"></span>PT Kampoeng Gadget Multimedia Com</span>
+                <span class="marquee-item"><span class="marquee-dot"></span>Gaming Optimal</span>
+                <span class="marquee-item"><span class="marquee-dot"></span>Professional Workstation</span>
+                <span class="marquee-item"><span class="marquee-dot"></span>Multimedia Setup</span>
+                <span class="marquee-item"><span class="marquee-dot"></span>Penjualan Perangkat</span>
+                <span class="marquee-item"><span class="marquee-dot"></span>Layanan Teknisi</span>
+                <span class="marquee-item"><span class="marquee-dot"></span>Konsultasi Sistem</span>
+                <span class="marquee-item"><span class="marquee-dot"></span>PT Kampoeng Gadget Multimedia Com</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================================================
+       STATS SECTION
+  ==================================================== -->
+    <section class="py-20 lg:py-28 bg-brand-darkest relative noise-overlay">
+        <div class="max-w-7xl mx-auto px-5 lg:px-8">
+
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+
+                <div class="stat-card bg-white/[0.03] border border-white/8 rounded-2xl p-6 md:p-8 text-center">
+                    <div class="text-[clamp(2rem,6vw,3.5rem)] font-black stat-number text-white mb-1" data-target="100">
+                        0</div>
+                    <div class="text-brand-red text-2xl font-black mb-2">+</div>
+                    <div class="text-white/50 text-sm font-medium leading-snug">Sistem Terbangun</div>
+                </div>
+
+                <div class="stat-card bg-white/[0.03] border border-white/8 rounded-2xl p-6 md:p-8 text-center"
+                    style="transition-delay:0.1s">
+                    <div class="text-[clamp(2rem,6vw,3.5rem)] font-black stat-number text-white mb-1" data-target="5">0
+                    </div>
+                    <div class="text-brand-red text-2xl font-black mb-2">+</div>
+                    <div class="text-white/50 text-sm font-medium leading-snug">Tahun Pengalaman</div>
+                </div>
+
+                <div class="stat-card bg-white/[0.03] border border-white/8 rounded-2xl p-6 md:p-8 text-center"
+                    style="transition-delay:0.2s">
+                    <div class="text-[clamp(2rem,6vw,3.5rem)] font-black stat-number text-white mb-1" data-target="3">0
+                    </div>
+                    <div class="text-brand-red text-2xl font-black mb-2">+</div>
+                    <div class="text-white/50 text-sm font-medium leading-snug">Kategori Spesialisasi</div>
+                </div>
+
+                <div class="stat-card bg-white/[0.03] border border-white/8 rounded-2xl p-6 md:p-8 text-center"
+                    style="transition-delay:0.3s">
+                    <div class="text-[clamp(2rem,6vw,3.5rem)] font-black stat-number text-white mb-1" data-target="24">0
+                    </div>
+                    <div class="text-brand-red text-2xl font-black mb-2">/7</div>
+                    <div class="text-white/50 text-sm font-medium leading-snug">Dukungan Pelanggan</div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Divider -->
+    <div class="glow-divider"></div>
+
+    <!-- ===================================================
+       TABLET SCROLL — "Kinerja Tanpa Kompromi"
+  ==================================================== -->
+    <section id="explore" class="w-full bg-brand-darkest relative noise-overlay">
+        <div id="home-tablet-container"
+            class="h-[55rem] md:h-[75rem] lg:h-[85rem] flex items-center justify-center relative w-full overflow-hidden px-4 md:px-10">
+            <div class="w-full relative tablet-perspective py-10 md:py-32">
+
+                <!-- Scroll-animated headline -->
+                <div id="home-tablet-header" class="max-w-4xl mx-auto text-center relative z-20 mb-8 md:mb-10">
+                    <span
+                        class="text-brand-red text-xs md:text-sm font-bold uppercase tracking-[0.2em] mb-3 block reveal-up">Kinerja
+                        tanpa kompromi</span>
+                    <h2 class="text-[clamp(2rem,6vw,5rem)] font-black tracking-tight text-white text-balance reveal-up">
+                        Platform
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-red-700">Tanpa
+                            Batas</span>
+                    </h2>
+                </div>
+
+                <!-- 3D Scroll Card -->
+                <div id="home-tablet-card"
+                    class="max-w-6xl mx-auto w-full h-[28rem] md:h-[40rem] lg:h-[44rem] border-2 border-white/10 rounded-[28px] tablet-card bg-black overflow-hidden relative z-10">
+                    <div class="relative h-full w-full">
+                        <!-- Background photo -->
+                        <img src="https://images.unsplash.com/photo-1547394765-185e1e68f34e?q=80&w=2070&auto=format&fit=crop"
+                            alt="Setup Gaming Premium" class="absolute inset-0 w-full h-full object-cover opacity-50">
+                        <!-- Gradient overlay -->
+                        <div class="absolute inset-0 bg-gradient-to-tr from-black via-black/60 to-transparent"></div>
+
+                        <!-- Content overlaid on card -->
+                        <div class="absolute inset-0 flex flex-col justify-end p-6 md:p-10 lg:p-14">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <!-- Info card 1 -->
+                                <div
+                                    class="bg-white/5 backdrop-blur-md rounded-2xl p-5 border border-white/10 hover:border-brand-red/40 transition-colors">
+                                    <i data-lucide="cpu" class="w-7 h-7 text-brand-red mb-3"></i>
+                                    <h3 class="text-lg font-bold text-white mb-1">Kecepatan Prosesor</h3>
+                                    <p class="text-white/50 text-sm leading-relaxed">Komponen terpilih memastikan setiap
+                                        proses berjalan tanpa hambatan, baik untuk gaming maupun komputasi profesional
+                                        berat.</p>
+                                </div>
+                                <!-- Info card 2 -->
+                                <div
+                                    class="bg-white/5 backdrop-blur-md rounded-2xl p-5 border border-white/10 hover:border-brand-red/40 transition-colors">
+                                    <i data-lucide="shield-check" class="w-7 h-7 text-brand-red mb-3"></i>
+                                    <h3 class="text-lg font-bold text-white mb-1">Garansi Kualitas</h3>
+                                    <p class="text-white/50 text-sm leading-relaxed">Setiap solusi yang kami berikan
+                                        didukung oleh tim berpengalaman yang mengutamakan ketepatan, kecepatan, dan
+                                        kepuasan pelanggan.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================================================
+       SERVICES — 3-Kolom Grid
+  ==================================================== -->
+    <section id="layanan" class="py-24 lg:py-32 bg-brand-dark relative border-t border-white/5 noise-overlay">
+        <div class="max-w-7xl mx-auto px-5 lg:px-8">
+
+            <!-- Section header -->
+            <div class="max-w-2xl mb-16 reveal-up">
+                <span class="text-brand-red text-xs font-bold uppercase tracking-[0.2em] mb-3 block">Fokus
+                    Layanan</span>
+                <h2 class="text-[clamp(1.8rem,5vw,3.5rem)] font-black tracking-tight text-white mb-4">Spesialisasi yang
+                    Menghadirkan Performa Optimal</h2>
+                <p class="text-white/50 text-base md:text-lg leading-relaxed">Dari racikan gaming rig hingga lingkungan
+                    kerja profesional, setiap layanan dibentuk untuk memenuhi standar tertinggi.</p>
+            </div>
+
+            <!-- Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+                <!-- Card 1 -->
+                <div class="service-card bg-[#141414] rounded-3xl border border-white/5 overflow-hidden">
+                    <div class="h-48 overflow-hidden relative">
+                        <img src="https://wallpapersok.com/images/hd/pc-gaming-setup-rgb-4k-ft1ym37yjyb7lp19.jpg"
+                            class="w-full h-full object-cover" alt="Gaming Setup">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#141414] to-transparent"></div>
+                        <div
+                            class="absolute top-3 right-3 bg-brand-red/90 text-white text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider">
+                            Spesialis</div>
+                    </div>
+                    <div class="p-7">
+                        <i data-lucide="gamepad-2" class="w-8 h-8 text-brand-red mb-4"></i>
+                        <h3 class="text-xl font-bold text-white mb-3">Gaming Rig Optimal</h3>
+                        <p class="text-white/50 text-sm leading-relaxed mb-5">Sistem rakitan kustom dengan manajemen
+                            termal mumpuni dan stabilitas overclock maksimal untuk dominasi penuh dalam dunia gaming
+                            kompetitif.</p>
+                        <a href="products.html"
+                            class="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-red hover:gap-3 transition-all">
+                            Selengkapnya <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="service-card bg-[#141414] rounded-3xl border border-white/5 overflow-hidden"
+                    style="transition-delay:0.12s">
+                    <div class="h-48 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1593640408182-31c70c8268f5?q=80&w=2042&auto=format&fit=crop"
+                            class="w-full h-full object-cover" alt="Workstation">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#141414] to-transparent"></div>
+                        <div
+                            class="absolute top-3 right-3 bg-white/10 text-white text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider backdrop-blur-md">
+                            Premium</div>
+                    </div>
+                    <div class="p-7">
+                        <i data-lucide="monitor-dot" class="w-8 h-8 text-brand-red mb-4"></i>
+                        <h3 class="text-xl font-bold text-white mb-3">Workstation Profesional</h3>
+                        <p class="text-white/50 text-sm leading-relaxed mb-5">Konfigurasi sistem bertenaga tinggi yang
+                            dioptimalkan khusus untuk rendering, analisis data, dan seluruh kebutuhan komputasi level
+                            produksi.</p>
+                        <a href="products.html"
+                            class="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-red hover:gap-3 transition-all">
+                            Selengkapnya <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="service-card bg-[#141414] rounded-3xl border border-white/5 overflow-hidden"
+                    style="transition-delay:0.24s">
+                    <div class="h-48 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1585079542156-2755d9c8a094?q=80&w=1974&auto=format&fit=crop"
+                            class="w-full h-full object-cover" alt="Multimedia">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#141414] to-transparent"></div>
+                    </div>
+                    <div class="p-7">
+                        <i data-lucide="clapperboard" class="w-8 h-8 text-brand-red mb-4"></i>
+                        <h3 class="text-xl font-bold text-white mb-3">Multimedia dan Kreasi</h3>
+                        <p class="text-white/50 text-sm leading-relaxed mb-5">Perlengkapan studio konten lengkap:
+                            monitor warna akurat, perangkat audio presisi, hingga aksesori perekaman profesional untuk
+                            kreator modern.</p>
+                        <a href="products.html"
+                            class="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-red hover:gap-3 transition-all">
+                            Selengkapnya <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Divider -->
+    <div class="glow-divider"></div>
+
+    <!-- ===================================================
+       WHY KAMPOENG — Values Showcase
+  ==================================================== -->
+    <section class="py-24 lg:py-32 bg-brand-darkest relative noise-overlay">
+        <div class="max-w-7xl mx-auto px-5 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+
+                <!-- Left: text -->
+                <div>
+                    <span
+                        class="text-brand-red text-xs font-bold uppercase tracking-[0.2em] mb-3 block reveal-up">Kenapa
+                        Memilih Kami</span>
+                    <h2
+                        class="text-[clamp(1.8rem,5vw,3.5rem)] font-black tracking-tight text-white mb-6 text-balance reveal-up">
+                        Partner, Bukan Sekadar Penjual Perangkat
+                    </h2>
+                    <p class="text-white/50 text-base md:text-lg leading-relaxed mb-8 reveal-up">
+                        Lebih dari sekadar penyedia perangkat, kami adalah partner yang membantu Anda membangun sistem
+                        terbaik untuk gaming, pekerjaan profesional, maupun kebutuhan kreatif.
+                    </p>
+
+                    <!-- Value pills -->
+                    <div class="flex flex-wrap gap-3 reveal-up">
+                        <span class="value-pill"><i data-lucide="check-circle" class="w-4 h-4 text-brand-red"></i>
+                            Ketepatan</span>
+                        <span class="value-pill"><i data-lucide="zap" class="w-4 h-4 text-brand-red"></i>
+                            Kecepatan</span>
+                        <span class="value-pill"><i data-lucide="heart-handshake" class="w-4 h-4 text-brand-red"></i>
+                            Kepuasan Pelanggan</span>
+                        <span class="value-pill"><i data-lucide="shield" class="w-4 h-4 text-brand-red"></i>
+                            Efisiensi</span>
+                        <span class="value-pill"><i data-lucide="award" class="w-4 h-4 text-brand-red"></i> Kualitas
+                            Terbaik</span>
+                    </div>
+                </div>
+
+                <!-- Right: Feature list -->
+                <div class="space-y-4">
+
+                    <div
+                        class="flex items-start gap-5 p-5 rounded-2xl bg-white/[0.03] border border-white/8 hover:border-brand-red/30 transition-colors reveal-right">
+                        <div
+                            class="flex-shrink-0 w-12 h-12 rounded-xl bg-brand-red/10 flex items-center justify-center">
+                            <i data-lucide="users" class="w-6 h-6 text-brand-red"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-white mb-1">Tim Berpengalaman</h4>
+                            <p class="text-white/50 text-sm leading-relaxed">Direktur Utama, Manager, Teknisi,
+                                Marketing, dan Admin bekerja sinergis untuk mengakomodasi setiap kebutuhan pelanggan
+                                secara profesional.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-5 p-5 rounded-2xl bg-white/[0.03] border border-white/8 hover:border-brand-red/30 transition-colors reveal-right"
+                        style="transition-delay:0.1s">
+                        <div
+                            class="flex-shrink-0 w-12 h-12 rounded-xl bg-brand-red/10 flex items-center justify-center">
+                            <i data-lucide="layers" class="w-6 h-6 text-brand-red"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-white mb-1">Solusi Menyeluruh</h4>
+                            <p class="text-white/50 text-sm leading-relaxed">Dari konsultasi awal, pemilihan komponen,
+                                perakitan, instalasi sistem, hingga perawatan berkala, semua tersedia di bawah satu
+                                atap.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-5 p-5 rounded-2xl bg-white/[0.03] border border-white/8 hover:border-brand-red/30 transition-colors reveal-right"
+                        style="transition-delay:0.2s">
+                        <div
+                            class="flex-shrink-0 w-12 h-12 rounded-xl bg-brand-red/10 flex items-center justify-center">
+                            <i data-lucide="gem" class="w-6 h-6 text-brand-red"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-white mb-1">Produk Berkualitas Tinggi</h4>
+                            <p class="text-white/50 text-sm leading-relaxed">Setiap komponen yang kami sediakan
+                                merupakan produk pilihan berkualitas tinggi yang dirancang untuk memberikan performa
+                                optimal dan daya tahan jangka panjang.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================================================
+       CTA BAND
+  ==================================================== -->
+    <section
+        class="py-20 lg:py-28 bg-brand-dark border-t border-b border-white/5 relative overflow-hidden noise-overlay">
+        <!-- Red glow blob -->
+        <div
+            class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-brand-red/15 blur-[120px] rounded-full pointer-events-none">
+        </div>
+
+        <div class="max-w-4xl mx-auto px-5 text-center relative z-10">
+            <h2
+                class="text-[clamp(1.8rem,5vw,3.5rem)] font-black tracking-tight text-balance text-white mb-5 reveal-up">
+                Siap Membangun Sistem Impianmu?
+            </h2>
+            <p class="text-white/50 text-base md:text-xl mb-10 reveal-up">
+                Hubungi tim kami sekarang dan mulai perjalanan menuju performa tanpa batas.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center reveal-up">
+                <a href="contact.html"
+                    class="inline-flex items-center justify-center gap-2.5 px-8 py-4 font-bold text-white rounded-full btn-shimmer shadow-xl shadow-brand-red/30 hover:opacity-90 transition-opacity text-base">
+                    <i data-lucide="message-circle" class="w-5 h-5"></i> Mulai Konsultasi
+                </a>
+                <a href="portfolio.html"
+                    class="inline-flex items-center justify-center gap-2.5 px-8 py-4 font-bold text-white/70 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 hover:text-white hover:border-white/25 transition-all text-base">
+                    Lihat Portfolio
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================================================
+       FOOTER
+  ==================================================== -->
+    <footer class="bg-brand-darkest py-10 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-5 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+
+            <div class="flex items-center gap-3">
+                <img src="img/KampoengGadged-Logo.png" class="h-9 w-auto" alt="Logo Kampoeng Gadget">
+                <div class="flex flex-col leading-tight">
+                    <span class="font-bold text-white text-sm uppercase tracking-wide">PT. Kampoeng Gadget</span>
+                    <span class="text-brand-red text-[10px] font-bold tracking-widest uppercase">Multimedia Com</span>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-6 text-sm text-white/30 flex-wrap justify-center">
+                <a href="about.html" class="hover:text-white transition-colors">About Us</a>
+                <a href="products.html" class="hover:text-white transition-colors">Products</a>
+                <a href="portfolio.html" class="hover:text-white transition-colors">Portfolio</a>
+                <a href="contact.html" class="hover:text-white transition-colors">Contact</a>
+            </div>
+
+            <p class="text-white/20 text-xs font-medium text-center md:text-right">
+                &copy; 2026 PT. Kampoeng Gadget Multimedia Com.<br>Hak Cipta Dilindungi Undang-Undang.
+            </p>
+        </div>
+    </footer>
+
+    <!-- JS -->
+    <script src="main.js"></script>
+</body>
+
+</html>

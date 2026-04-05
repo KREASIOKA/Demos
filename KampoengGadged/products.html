@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products & Services - Kampoeng Gadget</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { brand: { dark: '#111111', gray: '#333333', red: '#CC0000', white: '#ffffff' } },
+                    fontFamily: { sans: ['Inter', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+</head>
+<body data-page="products" class="bg-brand-dark text-brand-white antialiased overflow-x-hidden">
+    
+    <nav class="fixed top-0 w-full z-50 bg-brand-dark/80 backdrop-blur-md border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="index.html" class="flex gap-3 items-center">
+                        <img class="h-10 w-auto" src="img/KampoengGadged-Logo.png" alt="Kampoeng Gadget">
+                        <span class="font-bold text-xl tracking-tight">Kampoeng Gadget</span>
+                    </a>
+                </div>
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="index.html" class="nav-link text-brand-white hover:text-brand-red transition-colors text-sm font-medium">Homepage</a>
+                    <a href="about.html" class="nav-link text-brand-white hover:text-brand-red transition-colors text-sm font-medium">About Us</a>
+                    <a href="products.html" class="nav-link text-brand-red border-b-2 border-brand-red pb-1 font-medium text-sm">Products & Services</a>
+                    <a href="portfolio.html" class="nav-link text-brand-white hover:text-brand-red transition-colors text-sm font-medium">Portfolio</a>
+                    <a href="contact.html" class="px-5 py-2.5 rounded-full bg-brand-red hover:bg-red-700 text-white font-medium transition-all shadow-lg shadow-brand-red/20">Contact</a>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-brand-white hover:text-brand-red focus:outline-none p-2">
+                        <i data-lucide="menu" id="menu-icon"></i>
+                        <i data-lucide="x" id="close-icon" class="hidden"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden bg-brand-dark border-b border-white/10">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="index.html" class="block px-3 py-2 rounded-md font-medium hover:bg-brand-gray">Homepage</a>
+                <a href="about.html" class="block px-3 py-2 rounded-md font-medium hover:bg-brand-gray">About Us</a>
+                <a href="products.html" class="block px-3 py-2 rounded-md font-medium text-brand-red bg-brand-gray/50">Products & Services</a>
+                <a href="portfolio.html" class="block px-3 py-2 rounded-md font-medium hover:bg-brand-gray">Portfolio</a>
+                <a href="contact.html" class="block px-3 py-2 rounded-md text-brand-red font-medium hover:bg-brand-gray">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="pt-32 pb-20 min-h-100dvh flex flex-col relative w-full items-center">
+        <!-- Decorative bg -->
+        <div class="absolute top-0 left-0 w-full h-[50dvh] bg-gradient-to-b from-brand-red/10 to-transparent pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 w-full relative z-10">
+            <div class="text-center mb-16">
+                <h1 class="text-4xl md:text-6xl font-extrabold mb-4 uppercase tracking-tight">Layanan & Produk</h1>
+                <p class="text-gray-400 max-w-2xl mx-auto text-lg">Pilihan perangkat dan solusi terlengkap untuk aktivitas harian, profesional, hingga kreasi konten tanpa batas.</p>
+            </div>
+
+            <!-- Grid Layout -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 products-grid">
+                
+                <!-- Product 1 -->
+                <div class="product-card bg-[#1a1a1a] rounded-3xl overflow-hidden border border-white/10 hover:border-brand-red/30 hover-parallax group">
+                    <div class="h-64 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1593640408182-31c70c8268f5?q=80&w=2042&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Profesional Workstation">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#1a1a1a] to-transparent"></div>
+                        <div class="absolute top-4 right-4 bg-brand-red text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider backdrop-blur-md">Premium</div>
+                    </div>
+                    <div class="p-8">
+                        <div class="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center mb-6 group-hover:bg-brand-red/10 transition-colors">
+                            <i data-lucide="monitor" class="w-6 h-6 text-brand-red"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-3 text-white group-hover:text-brand-red transition-colors">Professional Workstation</h3>
+                        <p class="text-gray-400 mb-6 line-clamp-3 text-sm leading-relaxed">Sistem komputer tangguh yang dirancang kustom untuk kebutuhan rendering berat, analisis data, dan tuntutan komputasi level produksi tinggi.</p>
+                        <a href="contact.html" class="inline-flex items-center text-sm font-semibold text-white group-hover:text-brand-red">
+                            Konsultasi Setup <i data-lucide="arrow-right" class="w-4 h-4 ml-2 rtl:rotate-180"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Product 2 -->
+                <div class="product-card bg-[#1a1a1a] rounded-3xl overflow-hidden border border-white/10 hover:border-brand-red/30 hover-parallax group">
+                    <div class="h-64 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1600861194942-f883de0b249b?q=80&w=1956&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Gaming Setup">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#1a1a1a] to-transparent"></div>
+                        <div class="absolute top-4 right-4 bg-brand-red text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Top Tier</div>
+                    </div>
+                    <div class="p-8">
+                        <div class="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center mb-6 group-hover:bg-brand-red/10 transition-colors">
+                            <i data-lucide="gamepad-2" class="w-6 h-6 text-brand-red"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-3 text-white group-hover:text-brand-red transition-colors">Ultimate Gaming</h3>
+                        <p class="text-gray-400 mb-6 line-clamp-3 text-sm leading-relaxed">Rakitan mutakhir yang memfokuskan puncaknya pada frame rate tanpa distorsi, dukungan resolusi tinggi, serta keindahan estetik RGB lighting.</p>
+                        <a href="contact.html" class="inline-flex items-center text-sm font-semibold text-white group-hover:text-brand-red">
+                            Buat PC Gamemu <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Product 3 -->
+                <div class="product-card bg-[#1a1a1a] rounded-3xl overflow-hidden border border-white/10 hover:border-brand-red/30 hover-parallax group">
+                    <div class="h-64 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1585079542156-2755d9c8a094?q=80&w=1974&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Multimedia">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#1a1a1a] to-transparent"></div>
+                    </div>
+                    <div class="p-8">
+                        <div class="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center mb-6 group-hover:bg-brand-red/10 transition-colors">
+                            <i data-lucide="headphones" class="w-6 h-6 text-brand-red"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-3 text-white group-hover:text-brand-red transition-colors">Periferal & Multimedia</h3>
+                        <p class="text-gray-400 mb-6 line-clamp-3 text-sm leading-relaxed">Menyediakan aksesori lengkap mulai dari monitor resfresh-rate tinggi, perangkat audio presisi, mekanikal keyboard, hingga perbaikan teknis.</p>
+                        <a href="contact.html" class="inline-flex items-center text-sm font-semibold text-white group-hover:text-brand-red">
+                            Lihat Katalog <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-black py-8 border-t border-white/10 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-gray-500 text-sm">© 2026 PT. Kampoeng Gadget Multimedia Com. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+</html>

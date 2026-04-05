@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - Kampoeng Gadget</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { brand: { dark: '#111111', gray: '#333333', red: '#CC0000', white: '#ffffff' } },
+                    fontFamily: { sans: ['Inter', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body data-page="contact" class="bg-brand-dark text-brand-white antialiased overflow-x-hidden min-h-screen flex flex-col">
+    
+    <nav class="fixed top-0 w-full z-50 bg-brand-dark/80 backdrop-blur-md border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="index.html" class="flex gap-3 items-center">
+                        <img class="h-10 w-auto" src="img/KampoengGadged-Logo.png" alt="Kampoeng Gadget">
+                        <span class="font-bold text-xl tracking-tight">Kampoeng Gadget</span>
+                    </a>
+                </div>
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="index.html" class="nav-link text-brand-white hover:text-brand-red transition-colors text-sm font-medium">Homepage</a>
+                    <a href="about.html" class="nav-link text-brand-white hover:text-brand-red transition-colors text-sm font-medium">About Us</a>
+                    <a href="products.html" class="nav-link text-brand-white hover:text-brand-red transition-colors text-sm font-medium">Products & Services</a>
+                    <a href="portfolio.html" class="nav-link text-brand-white hover:text-brand-red transition-colors text-sm font-medium">Portfolio</a>
+                    <a href="contact.html" class="px-5 py-2.5 rounded-full bg-red-700 text-white font-medium transition-all shadow-lg shadow-brand-red/40 border border-brand-red">Contact</a>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-brand-white hover:text-brand-red focus:outline-none p-2">
+                        <i data-lucide="menu" id="menu-icon"></i>
+                        <i data-lucide="x" id="close-icon" class="hidden"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden bg-brand-dark border-b border-white/10">
+             <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="index.html" class="block px-3 py-2 rounded-md font-medium hover:bg-brand-gray">Homepage</a>
+                <a href="about.html" class="block px-3 py-2 rounded-md font-medium hover:bg-brand-gray">About Us</a>
+                <a href="products.html" class="block px-3 py-2 rounded-md font-medium hover:bg-brand-gray">Products & Services</a>
+                <a href="portfolio.html" class="block px-3 py-2 rounded-md font-medium hover:bg-brand-gray">Portfolio</a>
+                <a href="contact.html" class="block px-3 py-2 rounded-md text-brand-red bg-brand-gray/50 font-medium">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow pt-32 pb-20 flex items-center justify-center relative w-full">
+        <!-- Decor pattern -->
+        <div class="absolute inset-0 opacity-5 pointer-events-none" style="background-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 40px 40px;"></div>
+        
+        <div class="max-w-4xl mx-auto px-4 w-full relative z-10 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            
+            <div class="text-left">
+                <span class="text-brand-red font-bold uppercase tracking-widest text-sm mb-4 block">Terhubung Dengan Kami</span>
+                <h1 class="text-5xl font-extrabold mb-6 text-white text-balance leading-tight">Siap Membangun Sistem Impianmu?</h1>
+                <p class="text-gray-400 text-lg mb-8 text-balance">
+                    Jangan ragu untuk menghubungi kami melalui media komunikasi di bawah ini. Tim ahli Kampoeng Gadget akan segera memperhitungkan setiap spesifikasi dan harga yang Anda butuhkan.
+                </p>
+                
+                <div class="flex flex-col space-y-4">
+                    <a href="https://api.whatsapp.com/send?phone=6283180700717" target="_blank" rel="noopener noreferrer" class="flex items-center gap-4 p-4 rounded-2xl bg-[#25D366]/10 border border-[#25D366]/20 hover:bg-[#25D366]/20 transition-all group w-full max-w-sm">
+                        <div class="bg-[#25D366] text-white p-3 rounded-xl shadow-lg">
+                            <i data-lucide="message-circle" class="w-6 h-6"></i>
+                        </div>
+                        <div class="flex-1">
+                            <span class="block text-sm text-gray-400 font-medium tracking-wide">Pesan Singkat</span>
+                            <span class="block font-bold text-lg text-white">Hubungi WhatsApp</span>
+                        </div>
+                        <i data-lucide="external-link" class="w-5 h-5 text-[#25D366] opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                    </a>
+
+                    <a href="https://www.instagram.com/kampoenggadget_bkt" target="_blank" rel="noopener noreferrer" class="flex items-center gap-4 p-4 rounded-2xl bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-pink-500/20 hover:from-purple-500/20 hover:to-pink-500/20 transition-all group w-full max-w-sm">
+                        <div class="bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 text-white p-3 rounded-xl shadow-lg">
+                            <i data-lucide="instagram" class="w-6 h-6"></i>
+                        </div>
+                        <div class="flex-1">
+                            <span class="block text-sm text-gray-400 font-medium tracking-wide">Sosial Media</span>
+                            <span class="block font-bold text-lg text-white">Ikuti Instagram</span>
+                        </div>
+                        <i data-lucide="external-link" class="w-5 h-5 text-pink-400 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Aesthetic Image / Map placeholder -->
+            <div class="relative h-96 w-full rounded-3xl overflow-hidden shadow-2xl shadow-brand-red/10 border border-white/10 group">
+                <img src="https://images.unsplash.com/photo-1542744094-3a31f272c490?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover grayscale opacity-50 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700" alt="Contact Office">
+                <div class="absolute inset-0 bg-gradient-to-t from-brand-dark via-transparent to-transparent opacity-80"></div>
+                <div class="absolute bottom-6 left-6 right-6">
+                    <div class="bg-black/60 backdrop-blur-md p-4 rounded-xl border border-white/10">
+                        <div class="flex items-center gap-3 mb-2">
+                            <i data-lucide="map-pin" class="w-5 h-5 text-brand-red"></i>
+                            <span class="font-bold text-white">Kantor Pusat</span>
+                        </div>
+                        <p class="text-sm text-gray-300">PT. Kampoeng Gadget Multimedia Com.<br>Bukittinggi, Indonesia 2026</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-[#0a0a0a] py-8 border-t border-white/5 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <img src="img/KampoengGadged-Logo.png" class="h-8 w-auto opacity-70" alt="Logo">
+                <span class="text-gray-400 font-bold text-sm tracking-widest">KAMPOENG GADGET</span>
+            </div>
+            <p class="text-gray-500 text-sm">© 2026 Hak Cipta Dilindungi.</p>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+</html>

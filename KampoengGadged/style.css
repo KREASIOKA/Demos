@@ -1,0 +1,269 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+/* ============================================================
+   ROOT & GLOBAL
+   ============================================================ */
+:root {
+  --brand-dark:   #111111;
+  --brand-darkest:#080808;
+  --brand-gray:   #333333;
+  --brand-red:    #CC0000;
+  --brand-red-glow: rgba(204, 0, 0, 0.35);
+  --brand-white:  #ffffff;
+  --font-sans:    'Inter', system-ui, sans-serif;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+html, body {
+  overflow-x: hidden;
+  width: 100vw;
+  max-width: 100%;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--brand-dark);
+  color: var(--brand-white);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================================
+   SCROLLBAR
+   ============================================================ */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--brand-darkest); }
+::-webkit-scrollbar-thumb { background: var(--brand-gray); border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: var(--brand-red); }
+
+/* ============================================================
+   UTILITY CLASSES
+   ============================================================ */
+.h-100dvh   { height: 100dvh; }
+.min-h-100dvh { min-height: 100dvh; }
+.text-balance { text-wrap: balance; }
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* ============================================================
+   NOISE OVERLAY (subtle texture on sections)
+   ============================================================ */
+.noise-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+  opacity: 0.025;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+.nav-scrolled {
+  background-color: rgba(8, 8, 8, 0.95) !important;
+  border-bottom-color: rgba(255,255,255,0.08) !important;
+  box-shadow: 0 4px 30px rgba(0,0,0,0.5);
+}
+
+/* ============================================================
+   GRADIENT BARS (Hero)
+   ============================================================ */
+@keyframes pulseBar {
+  0%   { transform: scaleY(var(--initial-scale)); }
+  100% { transform: scaleY(calc(var(--initial-scale) * 0.65)); }
+}
+
+.gradient-bar {
+  transition: transform 0.5s ease-in-out;
+  transform-origin: bottom;
+  will-change: transform;
+}
+
+/* ============================================================
+   TABLET SCROLL (3D Card)
+   ============================================================ */
+.tablet-perspective { perspective: 1200px; }
+.tablet-card {
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.05),
+    0 20px 60px rgba(0,0,0,0.8),
+    0 60px 80px rgba(0,0,0,0.5),
+    0 0 80px var(--brand-red-glow);
+  will-change: transform;
+}
+
+/* ============================================================
+   STAT COUNTER
+   ============================================================ */
+.stat-number {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* ============================================================
+   MARQUEE (Running text ticker)
+   ============================================================ */
+.marquee-wrapper {
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
+  position: relative;
+}
+.marquee-wrapper::before,
+.marquee-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 80px;
+  z-index: 2;
+  pointer-events: none;
+}
+.marquee-wrapper::before {
+  left: 0;
+  background: linear-gradient(to right, var(--brand-darkest), transparent);
+}
+.marquee-wrapper::after {
+  right: 0;
+  background: linear-gradient(to left, var(--brand-darkest), transparent);
+}
+
+.marquee-track {
+  display: inline-block;
+  white-space: nowrap;
+  animation: marqueeScroll 28s linear infinite;
+}
+.marquee-track:hover { animation-play-state: paused; }
+
+@keyframes marqueeScroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.marquee-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0 2.5rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+}
+.marquee-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--brand-red);
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   SERVICE CARDS
+   ============================================================ */
+.service-card {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              border-color 0.3s ease,
+              box-shadow 0.4s ease;
+}
+.service-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at bottom right, rgba(204,0,0,0.18), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+.service-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+.service-card:hover::after { opacity: 1; }
+
+/* ============================================================
+   VALUE PILLS
+   ============================================================ */
+.value-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.04);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  transition: border-color 0.3s, background 0.3s;
+}
+.value-pill:hover {
+  border-color: var(--brand-red);
+  background: rgba(204,0,0,0.1);
+}
+
+/* ============================================================
+   HOVER PARALLAX (Products)
+   ============================================================ */
+.hover-parallax {
+  transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.hover-parallax:hover { transform: translateY(-10px) scale(1.02); }
+
+/* ============================================================
+   GLOWING DIVIDER
+   ============================================================ */
+.glow-divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(204,0,0,0.6), transparent);
+}
+
+
+
+/* ============================================================
+   ANIMATED GRADIENT BADGE (Hero badge)
+   ============================================================ */
+@keyframes borderPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(204,0,0,0.4); }
+  50%       { box-shadow: 0 0 0 6px rgba(204,0,0,0);  }
+}
+.badge-pulse { animation: borderPulse 2.5s ease-in-out infinite; }
+
+/* ============================================================
+   CTA BUTTON SHIMMER
+   ============================================================ */
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+.btn-shimmer {
+  background: linear-gradient(110deg, #CC0000 40%, #ff3333 50%, #CC0000 60%);
+  background-size: 200% auto;
+  animation: shimmer 3s linear infinite;
+}
+
+/* ============================================================
+   STAT CARD GLOW ON HOVER
+   ============================================================ */
+.stat-card {
+  transition: border-color 0.3s, transform 0.3s;
+}
+.stat-card:hover {
+  border-color: rgba(204,0,0,0.5) !important;
+  transform: translateY(-4px);
+}
