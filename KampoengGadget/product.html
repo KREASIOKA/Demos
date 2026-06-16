@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Produk - Kampoeng Gadget</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- Header / Navbar -->
+    <header class="header" style="background: rgba(10, 10, 12, 0.95);">
+        <div class="container header-container">
+            <a href="index.html" class="logo">
+                <img src="img/Kampoeng Gadged Logo.webp" alt="Kampoeng Gadged Logo">
+                <div class="logo-text">
+                    <span class="logo-name">Kampoeng Gadget</span>
+                    <span class="logo-sub">MULTIMEDIA COM</span>
+                </div>
+            </a>
+            <nav class="nav-links">
+                <a href="index.html">HOMEPAGE</a>
+                <a href="katalog.html">KATALOG</a>
+            </nav>
+            <div class="header-actions">
+                <a href="https://wa.me/6283180700717" target="_blank" class="btn btn-primary">Hubungi Kami</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="product-detail-section">
+            <div class="container">
+                <div id="product-loading" style="text-align: center; padding: 100px 0; color: var(--primary-red);">
+                    <i class="fas fa-circle-notch fa-spin fa-3x"></i>
+                </div>
+                
+                <div id="product-not-found" style="display: none; text-align: center; padding: 100px 0;">
+                    <h2>Produk Tidak Ditemukan</h2>
+                    <p style="color: var(--text-muted); margin: 20px 0;">Maaf, produk yang Anda cari tidak tersedia atau sudah dihapus.</p>
+                    <a href="katalog.html" class="btn btn-outline"><i class="fas fa-arrow-left"></i> Kembali ke Katalog</a>
+                </div>
+
+                <div class="product-detail-row" id="product-content" style="display: none;">
+                    <div class="product-gallery">
+                        <div class="product-main-img" id="main-img"></div>
+                        <div class="product-thumbs" id="thumb-container">
+                            <!-- Thumbnails dynamically inserted -->
+                        </div>
+                    </div>
+                    
+                    <div class="product-info">
+                        <span class="product-category" id="prod-kategori">KATEGORI</span>
+                        <h1 class="product-title" id="prod-nama">Nama Produk</h1>
+                        <div class="product-price" id="prod-harga">Rp 0</div>
+                        
+                        <div style="margin-top: 10px;">
+                            <h3 style="margin-bottom: 15px; font-size: 1.2rem;">Spesifikasi / Deskripsi</h3>
+                            <div class="product-desc" id="prod-desc">
+                                Deskripsi memuat...
+                            </div>
+                        </div>
+                        
+                        <div class="product-actions">
+                            <a href="katalog.html" class="btn btn-outline"><i class="fas fa-arrow-left"></i> Kembali</a>
+                            <a href="#" id="btn-checkout" target="_blank" class="btn btn-primary"><i class="fab fa-whatsapp"></i> Beli Sekarang</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-container">
+            <div class="footer-left">
+                <img src="img/Kampoeng Gadged Logo.webp" alt="Logo" class="footer-logo">
+                <div class="footer-brand">
+                    <span class="brand-white">PT. KAMPOENG GADGET</span>
+                    <span class="brand-red">MULTIMEDIA COM</span>
+                </div>
+            </div>
+            <div class="footer-right">
+                <p>&copy; 2026 PT. Kampoeng Gadget Multimedia Com</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

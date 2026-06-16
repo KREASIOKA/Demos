@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Kampoeng Gadget</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background-color: var(--bg-dark); color: var(--text-light); }
+        #app-dashboard { display: none; }
+    </style>
+</head>
+<body>
+
+    <!-- Login Area -->
+    <div class="dashboard-login" id="login-area">
+        <div class="login-card">
+            <img src="img/Kampoeng Gadged Logo.webp" alt="Logo" width="80" style="margin-bottom: 20px;">
+            <h2>Admin Login</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 5px;">Dashboard Manajemen Produk</p>
+            <input type="password" id="auth-key" placeholder="Masukkan Secret Key Dashboard" autocomplete="off">
+            <button class="btn btn-primary" id="btn-login" style="width: 100%;">Masuk</button>
+            <p id="login-error" style="color: var(--primary-red); font-size: 0.85rem; margin-top: 10px; display: none;">Key tidak valid atau server bermasalah.</p>
+        </div>
+    </div>
+
+    <!-- Dashboard App -->
+    <div id="app-dashboard">
+        <header class="header" style="position: static; padding: 15px 0;">
+            <div class="container header-container">
+                <div class="logo">
+                    <img src="img/Kampoeng Gadged Logo.webp" alt="Logo">
+                    <div class="logo-text">
+                        <span class="logo-name">Admin Panel</span>
+                        <span class="logo-sub">Database Produk</span>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-outline" id="btn-logout"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                </div>
+            </div>
+        </header>
+
+        <div class="dashboard-container">
+            <!-- Sidebar / Form -->
+            <div class="dashboard-sidebar">
+                <h3 id="form-title" style="margin-bottom: 20px; border-bottom: 1px solid var(--card-border); padding-bottom: 10px;">Tambah Produk Baru</h3>
+                
+                <form id="product-form">
+                    <input type="hidden" id="form-action" value="add">
+                    <input type="hidden" id="old-message-ids" value="[]">
+
+                    <div class="admin-form-group">
+                        <label>Kategori Produk</label>
+                        <select id="input-kategori" required>
+                            <option value="PC Gaming">PC Gaming</option>
+                            <option value="Laptop">Laptop</option>
+                            <option value="Aksesoris">Aksesoris</option>
+                            <option value="Sparepart">Sparepart</option>
+                        </select>
+                    </div>
+
+                    <div class="admin-form-group">
+                        <label>Nama Produk</label>
+                        <input type="text" id="input-nama" placeholder="Cth: ASUS ROG Strix" required>
+                    </div>
+
+                    <div class="admin-form-group">
+                        <label>Harga (Rupiah)</label>
+                        <input type="number" id="input-harga" placeholder="Cth: 15000000" required>
+                    </div>
+
+                    <div class="admin-form-group">
+                        <label>Deskripsi / Spesifikasi</label>
+                        <textarea id="input-desc" placeholder="Spesifikasi lengkap..." required></textarea>
+                    </div>
+
+                    <div class="admin-form-group">
+                        <label>Foto Produk (Maks 7 Foto)</label>
+                        <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 10px;">Gambar akan dikompres otomatis oleh browser sebelum diunggah.</p>
+                        <div class="file-upload-grid" id="upload-grid">
+                            <!-- JS will generate 7 slots -->
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" id="btn-submit" style="width: 100%;"><i class="fas fa-save"></i> Simpan Produk</button>
+                    <button type="button" class="btn btn-outline" id="btn-cancel-edit" style="width: 100%; margin-top: 10px; display: none;">Batal Edit</button>
+                </form>
+            </div>
+
+            <!-- Content / Product List -->
+            <div class="dashboard-content">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3>Daftar Produk Aktif</h3>
+                    <button class="btn btn-outline" id="btn-refresh"><i class="fas fa-sync-alt"></i> Refresh Data</button>
+                </div>
+
+                <div id="admin-loading" style="text-align: center; padding: 40px 0; color: var(--primary-red);">
+                    <i class="fas fa-circle-notch fa-spin fa-2x"></i>
+                </div>
+
+                <table class="admin-list-table" id="admin-table" style="display: none;">
+                    <thead>
+                        <tr>
+                            <th>Gambar</th>
+                            <th>Info Produk</th>
+                            <th>Harga</th>
+                            <th style="text-align: right;">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-tbody">
+                        <!-- Rows populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Katalog Produk - Kampoeng Gadget Multimedia Com</title>
+    <meta name="description"
+        content="Katalog produk lengkap PT Kampoeng Gadget Multimedia Com. Temukan berbagai PC Rakitan, Laptop, dan aksesoris terbaik.">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- Header / Navbar -->
+    <header class="header">
+        <div class="container header-container">
+            <a href="index.html" class="logo">
+                <img src="img/Kampoeng Gadged Logo.webp" alt="Kampoeng Gadged Logo">
+                <div class="logo-text">
+                    <span class="logo-name">Kampoeng Gadget</span>
+                    <span class="logo-sub">MULTIMEDIA COM</span>
+                </div>
+            </a>
+
+            <nav class="nav-links">
+                <a href="index.html">HOMEPAGE</a>
+                <a href="about.html">ABOUT US</a>
+                <a href="index.html#services">PRODUCT & SERVICE</a>
+                <a href="katalog.html" class="active">PORTFOLIO</a>
+            </nav>
+
+            <div class="header-actions">
+                <a href="https://wa.me/6283180700717" target="_blank" rel="noopener noreferrer"
+                    class="btn btn-primary">Hubungi Kami</a>
+                <button class="hamburger" id="hamburger-menu" aria-label="Menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="mobile-menu" id="mobile-menu">
+            <a href="index.html">HOMEPAGE</a>
+            <a href="about.html">ABOUT US</a>
+            <a href="index.html#services">PRODUCT & SERVICE</a>
+            <a href="katalog.html" class="active">PORTFOLIO</a>
+            <a href="https://wa.me/6283180700717" target="_blank" rel="noopener noreferrer"
+                class="btn btn-primary mobile-btn">Hubungi Kami</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Page Hero -->
+        <section class="hero page-hero" style="min-height: 100dvh; display: flex; align-items: center; justify-content: center;">
+            <div class="container">
+                <span class="badge" data-aos="fade-down"><i class="fas fa-shopping-cart"></i> KATALOG PRODUK</span>
+                <h1 data-aos="zoom-in">Jelajahi Pilihan Terbaik Kami</h1>
+                <p data-aos="fade-up" data-aos-delay="100">
+                    Temukan rakitan PC impian, laptop performa tinggi, dan aksesoris premium untuk memaksimalkan produktivitas Anda.
+                </p>
+                <div data-aos="fade-up" data-aos-delay="200" style="margin-top: 30px;">
+                    <a href="#katalog-list" class="btn btn-primary"><i class="fas fa-arrow-down"></i> Lihat Produk</a>
+                </div>
+            </div>
+            <div class="glow-line"></div>
+        </section>
+
+        <!-- Katalog Data -->
+        <section class="katalog-section" id="katalog-list">
+            <div class="container">
+                <div class="section-header" data-aos="fade-up">
+                    <span class="section-subtitle">DATABASE REAL-TIME</span>
+                    <h2>Daftar Produk</h2>
+                </div>
+
+                <div id="loading-katalog" style="text-align: center; padding: 50px 0; color: var(--primary-red);">
+                    <i class="fas fa-circle-notch fa-spin fa-3x"></i>
+                    <p style="margin-top: 15px; color: var(--text-muted);">Memuat data produk...</p>
+                </div>
+
+                <div class="katalog-grid" id="katalog-grid" style="display: none;">
+                    <!-- Cards will be populated here via JS -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-container">
+            <div class="footer-left">
+                <img src="img/Kampoeng Gadged Logo.webp" alt="Kampoeng Gadged Logo" class="footer-logo">
+                <div class="footer-brand">
+                    <span class="brand-white">PT. KAMPOENG GADGET</span>
+                    <span class="brand-red">MULTIMEDIA COM</span>
+                </div>
+            </div>
+
+            <div class="footer-links">
+                <a href="about.html">About Us</a>
+                <a href="index.html#services">Product</a>
+                <a href="katalog.html">Portfolio</a>
+                <a href="index.html#contact">Contact</a>
+            </div>
+
+            <div class="footer-right">
+                <p>&copy; 2026 PT. Kampoeng Gadget Multimedia Com<br>Hak Cipta Dilindungi Undang-Undang</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>

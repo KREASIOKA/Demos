@@ -7,7 +7,7 @@
     <title>Kampoeng Gadged - Mitra Terbaik Untuk Kebutuhan Teknologi</title>
     <meta name="description"
         content="PT Kampoeng Gadget Multimedia Com adalah mitra terbaik untuk kebutuhan teknologi Anda. Gaming PC, Laptop, Sparepart, Accessories, dan Service.">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/styles.css">
     <link rel="icon" type="image/x-icon" href="img/favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
@@ -32,9 +32,9 @@
 
             <nav class="nav-links">
                 <a href="#home" class="active">HOMEPAGE</a>
-                <a href="#about">ABOUT US</a>
+                <a href="about.html">ABOUT US</a>
                 <a href="#services">PRODUCT & SERVICE</a>
-                <a href="#portfolio">PORTFOLIO</a>
+                <a href="portfolio.html">PORTFOLIO</a>
             </nav>
 
             <div class="header-actions">
@@ -49,9 +49,9 @@
         <!-- Mobile Menu -->
         <div class="mobile-menu" id="mobile-menu">
             <a href="#home" class="active">HOMEPAGE</a>
-            <a href="#about">ABOUT US</a>
+            <a href="about.html">ABOUT US</a>
             <a href="#services">PRODUCT & SERVICE</a>
-            <a href="#portfolio">PORTFOLIO</a>
+            <a href="portfolio.html">PORTFOLIO</a>
             <a href="https://wa.me/6283180700717" target="_blank" rel="noopener noreferrer"
                 class="btn btn-primary mobile-btn">Hubungi Kami</a>
         </div>
@@ -240,7 +240,7 @@
                         <h3>Gaming Enjoyers</h3>
                         <p>Sistem rakitan kustom dengan manajemen termal yang mumpuni dan stabilitas overclock maksimal
                             untuk dominasi penuh dalam dunia gaming kompetitif</p>
-                        <a href="#" class="service-link">SELENGKAPNYA <i class="fas fa-arrow-right"></i></a>
+                        <a href="javascript:void(0)" class="service-link consultation-link">SELENGKAPNYA <i class="fas fa-arrow-right"></i></a>
                     </div>
 
                     <!-- Card 2: Workstation Professional -->
@@ -252,7 +252,7 @@
                         <h3>Workstation Professional</h3>
                         <p>Konfigurasi sistem bertenaga tinggi yang dioptimalkan khusus untuk rendering, analisis data,
                             dan seluruh kebutuhan komputasi level produksi</p>
-                        <a href="#" class="service-link">SELENGKAPNYA <i class="fas fa-arrow-right"></i></a>
+                        <a href="javascript:void(0)" class="service-link consultation-link">SELENGKAPNYA <i class="fas fa-arrow-right"></i></a>
                     </div>
 
                     <!-- Card 3: Multimedia & Kreatif -->
@@ -264,7 +264,7 @@
                         <h3>Multimedia & Kreatif</h3>
                         <p>Perlengkapan studio konten lengkap : monitor warna akurat, perangkat audio presisi, hingga
                             aksesori perekaman profesional untuk kreator modern</p>
-                        <a href="#" class="service-link">SELENGKAPNYA <i class="fas fa-arrow-right"></i></a>
+                        <a href="katalog.html" class="service-link">SELENGKAPNYA <i class="fas fa-arrow-right"></i></a>
                     </div>
 
                     <!-- Card 4: PC & Laptop -->
@@ -275,7 +275,7 @@
                         <h3>PC & Laptop</h3>
                         <p>Sistem rakitan kustom, rakitan bawaan, dan perangkat portabel terbaik sesuai dengan kebutuhan
                             semua aktivitas</p>
-                        <a href="#" class="service-link">SELENGKAPNYA <i class="fas fa-arrow-right"></i></a>
+                        <a href="katalog.html" class="service-link">SELENGKAPNYA <i class="fas fa-arrow-right"></i></a>
                     </div>
 
                     <!-- Card 5: Services, Acc, & Sparepart -->
@@ -286,7 +286,7 @@
                         <h3>Services, Acc, & Sparepart</h3>
                         <p>Jasa perbaikan perangkat keras & lunak, sparepart, beserta aksesoris-aksesories pelengkap
                             penunjang kegiatan apapun</p>
-                        <a href="#" class="service-link">SELENGKAPNYA <i class="fas fa-arrow-right"></i></a>
+                        <a href="javascript:void(0)" class="service-link consultation-link">SELENGKAPNYA <i class="fas fa-arrow-right"></i></a>
                     </div>
 
                     <!-- Card 6: Katalog -->
@@ -295,7 +295,7 @@
                         <div class="catalog-icon">
                             <i class="fas fa-shopping-cart"></i>
                         </div>
-                        <a href="#" class="service-link catalog-link">CEK DISINI <i class="fas fa-arrow-right"></i></a>
+                        <a href="katalog.html" class="service-link catalog-link">CEK DISINI <i class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
             </div>
@@ -310,7 +310,7 @@
                 <div class="cta-buttons">
                     <a href="https://wa.me/6283180700717" target="_blank" rel="noopener noreferrer"
                         class="btn btn-primary btn-lg"><i class="far fa-comment-dots"></i> Mulai Konsultasi</a>
-                    <a href="#" class="btn btn-outline btn-lg">Lihat Portofolio</a>
+                    <a href="portfolio.html" class="btn btn-outline btn-lg">Lihat Portofolio</a>
                 </div>
 
                 <div class="cta-layout-wrapper">
@@ -381,6 +381,29 @@
                 </div>
             </div>
         </section>
+
+        <!-- Consultation Modal -->
+        <div class="modal-overlay" id="consultation-modal">
+            <div class="modal-content">
+                <button class="btn-close-icon" id="modal-close-icon" aria-label="Close Modal"><i class="fas fa-times"></i></button>
+                <div class="modal-icon"><i class="fab fa-whatsapp"></i></div>
+                <h3 class="modal-title">Konsultasi Layanan</h3>
+                <p class="modal-desc">
+                    Layanan ini membutuhkan konsultasi khusus dengan spesialis kami. Anda akan dialihkan ke WhatsApp dalam:
+                </p>
+                <div class="countdown-wrapper">
+                    <svg class="countdown-svg" viewBox="0 0 100 100">
+                        <circle class="countdown-circle countdown-bg" cx="50" cy="50" r="45"></circle>
+                        <circle class="countdown-circle countdown-progress" id="countdown-progress" cx="50" cy="50" r="45"></circle>
+                    </svg>
+                    <span class="countdown-number" id="countdown-number">7</span>
+                </div>
+                <div class="modal-actions">
+                    <button class="btn btn-outline" id="btn-cancel-redirect">Batal</button>
+                    <a href="https://wa.me/6283180700717" target="_blank" rel="noopener noreferrer" class="btn btn-primary" id="btn-manual-redirect">Konsultasi Sekarang</a>
+                </div>
+            </div>
+        </div>
     </main>
 
     <!-- Footer -->
@@ -395,9 +418,9 @@
             </div>
 
             <div class="footer-links">
-                <a href="#about">About Us</a>
+                <a href="about.html">About Us</a>
                 <a href="#services">Product</a>
-                <a href="#portfolio">Portfolio</a>
+                <a href="portfolio.html">Portfolio</a>
                 <a href="#contact">Contact</a>
             </div>
 
@@ -410,69 +433,7 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-    <script>
-        // Initialize Leaflet Map
-        document.addEventListener("DOMContentLoaded", function () {
-            var map = L.map('kampoeng-map', {
-                zoomControl: false,
-                scrollWheelZoom: false // Prevent accidental scrolling while scrolling the page
-            }).setView([-0.3125917, 100.3812145], 16);
-
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-                attribution: '&copy; <a href="https://carto.com/">CARTO</a>',
-                subdomains: 'abcd',
-                maxZoom: 20
-            }).addTo(map);
-
-            var customIcon = L.divIcon({
-                className: 'custom-map-marker',
-                html: '<i class="fas fa-map-marker-alt" style="color: var(--primary-red); font-size: 32px; filter: drop-shadow(0 0 10px rgba(255,0,0,0.8));"></i>',
-                iconSize: [32, 32],
-                iconAnchor: [16, 32]
-            });
-
-            L.marker([-0.3125917, 100.3812145], { icon: customIcon }).addTo(map);
-
-            L.control.zoom({ position: 'bottomleft' }).addTo(map);
-        });
-
-        // Initialize AOS
-        AOS.init({
-            duration: 800,
-            once: false,
-            offset: 100
-        });
-
-        // Hamburger Menu Toggle
-        const hamburger = document.getElementById('hamburger-menu');
-        const mobileMenu = document.getElementById('mobile-menu');
-
-        hamburger.addEventListener('click', () => {
-            mobileMenu.classList.toggle('open');
-            hamburger.querySelector('i').classList.toggle('fa-bars');
-            hamburger.querySelector('i').classList.toggle('fa-times');
-        });
-
-        // Close mobile menu on link click
-        document.querySelectorAll('.mobile-menu a').forEach(link => {
-            link.addEventListener('click', () => {
-                mobileMenu.classList.remove('open');
-                hamburger.querySelector('i').classList.add('fa-bars');
-                hamburger.querySelector('i').classList.remove('fa-times');
-            });
-        });
-
-        // Smooth scroll for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    e.preventDefault();
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            });
-        });
-    </script>
+    <script src="js/main.js"></script>
 </body>
 
 </html>
