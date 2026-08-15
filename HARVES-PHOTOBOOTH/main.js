@@ -173,24 +173,20 @@ document.addEventListener('DOMContentLoaded', () => {
             els.templateCanvas.width = els.photoCanvas.width = img.width;
             els.templateCanvas.height = els.photoCanvas.height = img.height;
             
-            // Draw original image
+            // The stored image is already the processed transparent PNG
+            ctx.template.clearRect(0, 0, img.width, img.height);
             ctx.template.drawImage(img, 0, 0);
             
-            // Re-apply transparency mask from saved areas
-            const imgData = ctx.template.getImageData(0, 0, img.width, img.height);
-            // We need to cut out the bounds
-            // Since storing a full transparent PNG is slow, we saved the original JPG + areas
-            // Let's cut the rects. Wait, chroma key is non-rectangular.
-            // Better: we saved the transparent image dataURL in indexedDB!
-            // Let's load the transparent image directly.
+            // Draw dark placeholders so areas are visible on white bg
+            drawAreaPlaceholders();
+            
+            show(els.canvasEmpty, false);
+            show(els.chromaSection, false);
+            resizeCanvas();
+            updateUI();
+            renderTemplateGallery();
         };
-        img.src = tpl.imageDataUrl; // This should be the processed (transparent) image
-        
-        show(els.canvasEmpty, false);
-        show(els.chromaSection, false); // Hide chroma config if using saved
-        resizeCanvas();
-        updateUI();
-        renderTemplateGallery();
+        img.src = tpl.imageDataUrl;
     };
 
     const saveTemplateToLibrary = async (originalImg, transparentDataUrl, areas) => {
@@ -368,6 +364,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             ctx.template.putImageData(imgData, 0, 0);
             
+            // Draw dark placeholders on photoCanvas so areas are visible on white bg
+            drawAreaPlaceholders();
+            
             // Save to IndexedDB
             const transparentDataUrl = els.templateCanvas.toDataURL('image/png');
             await saveTemplateToLibrary(State.rawTemplate, transparentDataUrl, State.areas);
@@ -533,19 +532,39 @@ document.addEventListener('DOMContentLoaded', () => {
     els.stopAutoCaptureBtn.onclick = stopAutoCapture;
 
     const startAutoCaptureSequence = () => {
-        const idle = els.enableIdle.checked ? parseInt(els.idleTime.value) * 1000 : 0;
+        const idle = els.enableIdle.checked ? parseInt(els.idleTime.value) : 0;
         const count = parseInt(els.countdownTime.value);
         
         if (idle > 0) {
-            els.countdownMessage.textContent = 'Get ready...'; show(els.countdownMessage, true);
-            State.autoTimer = setTimeout(() => doCountdown(count), idle);
+            els.countdownMessage.textContent = '🕐 Bersiap-siap...'; 
+            els.countdownMessage.classList.remove('countdown-warning');
+            show(els.countdownMessage, true);
+            let c = idle;
+            els.countdownDisplay.textContent = c; 
+            els.countdownDisplay.classList.remove('countdown-warning');
+            els.countdownDisplay.style.opacity = '0.5';
+            show(els.countdownDisplay, true);
+            
+            State.countInterval = setInterval(() => {
+                c--;
+                if (c > 0) {
+                    els.countdownDisplay.textContent = c;
+                    els.countdownMessage.textContent = `🕐 Bersiap-siap... (${c}s)`;
+                } else {
+                    clearInterval(State.countInterval);
+                    els.countdownDisplay.style.opacity = '1';
+                    doCountdown(count);
+                }
+            }, 1000);
         } else {
             doCountdown(count);
         }
     };
 
     const doCountdown = (secs) => {
-        els.countdownMessage.textContent = 'Smile in:'; show(els.countdownMessage, true);
+        els.countdownMessage.textContent = '📸 Tersenyum!'; 
+        els.countdownMessage.classList.add('countdown-warning');
+        show(els.countdownMessage, true);
         let c = secs;
         els.countdownDisplay.textContent = c; show(els.countdownDisplay, true);
         els.countdownDisplay.classList.remove('countdown-warning');
@@ -562,6 +581,31 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 1000);
     };
 
+    // --- AREA PLACEHOLDERS (dark rectangles on white theme) ---
+    const drawAreaPlaceholders = () => {
+        ctx.photo.clearRect(0,0, els.photoCanvas.width, els.photoCanvas.height);
+        State.areas.forEach(a => {
+            if (a.photo) return; // skip if already has photo
+            const b = a.bounds;
+            // Draw dark semi-transparent fill
+            ctx.photo.fillStyle = 'rgba(0, 0, 0, 0.15)';
+            ctx.photo.fillRect(b.x, b.y, b.w, b.h);
+            // Draw border
+            ctx.photo.strokeStyle = 'rgba(0, 0, 0, 0.25)';
+            ctx.photo.lineWidth = 2;
+            ctx.photo.setLineDash([8, 4]);
+            ctx.photo.strokeRect(b.x, b.y, b.w, b.h);
+            ctx.photo.setLineDash([]);
+            // Draw area number
+            const fontSize = Math.max(16, Math.min(b.w, b.h) * 0.15);
+            ctx.photo.font = `bold ${fontSize}px ${getComputedStyle(document.body).fontFamily}`;
+            ctx.photo.fillStyle = 'rgba(0, 0, 0, 0.3)';
+            ctx.photo.textAlign = 'center';
+            ctx.photo.textBaseline = 'middle';
+            ctx.photo.fillText(`Area ${a.id}`, b.x + b.w / 2, b.y + b.h / 2);
+        });
+    };
+
     // --- PHOTO RENDERING ---
     const redrawPhotos = () => {
         ctx.photo.clearRect(0,0, els.photoCanvas.width, els.photoCanvas.height);
@@ -569,6 +613,23 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.photo.imageSmoothingQuality = 'high';
         State.areas.forEach(a => {
             if(a.photo) ctx.photo.drawImage(a.photo, a.photoX, a.photoY, a.photo.width*a.photoScale, a.photo.height*a.photoScale);
+            else {
+                // Draw placeholder for unfilled areas
+                const b = a.bounds;
+                ctx.photo.fillStyle = 'rgba(0, 0, 0, 0.15)';
+                ctx.photo.fillRect(b.x, b.y, b.w, b.h);
+                ctx.photo.strokeStyle = 'rgba(0, 0, 0, 0.25)';
+                ctx.photo.lineWidth = 2;
+                ctx.photo.setLineDash([8, 4]);
+                ctx.photo.strokeRect(b.x, b.y, b.w, b.h);
+                ctx.photo.setLineDash([]);
+                const fontSize = Math.max(16, Math.min(b.w, b.h) * 0.15);
+                ctx.photo.font = `bold ${fontSize}px ${getComputedStyle(document.body).fontFamily}`;
+                ctx.photo.fillStyle = 'rgba(0, 0, 0, 0.3)';
+                ctx.photo.textAlign = 'center';
+                ctx.photo.textBaseline = 'middle';
+                ctx.photo.fillText(`Area ${a.id}`, b.x + b.w / 2, b.y + b.h / 2);
+            }
         });
     };
 
