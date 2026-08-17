@@ -199,12 +199,23 @@ document.addEventListener('DOMContentLoaded', () => {
     els.btnStartCapture.onclick = () => goToStep(3);
     els.backToTimer.onclick = () => { stopAutoCapture(); goToStep(2); };
     els.backToCaptureBtn.onclick = () => { State.areas.forEach(a => a.photo = null); goToStep(3); };
-    els.resetAllBtn.onclick = () => {
-        State.activeTemplateId = null; State.template = null; State.areas = [];
+    const resetSession = () => {
+        stopAutoCapture();
+        State.activeTemplateId = null;
+        State.template = null;
+        State.areas = [];
+        State.currentAreaIdx = -1;
+        State.tempPhoto = null;
+        State.dimBox = null;
         ctx.photo.clearRect(0, 0, els.photoCanvas.width, els.photoCanvas.height);
         ctx.template.clearRect(0, 0, els.templateCanvas.width, els.templateCanvas.height);
-        goToStep(0);
+        els.reviewOverlay.classList.remove('show');
+        els.qrSection.style.display = 'none';
+        els.qrCodeContainer.innerHTML = '';
+        els.btnContinueToTimer.disabled = true;
     };
+    els.resetAllBtn.onclick = () => { resetSession(); goToStep(0); };
+    els.backToCaptureBtn.onclick = () => { State.areas.forEach(a => a.photo = null); goToStep(3); };
 
     // --- TEMPLATE LIBRARY ---
     const loadTemplateLibrary = async () => {
@@ -773,7 +784,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const generateHighResCanvas = (dpi, quality) => {
         let scale = dpi / 96;
-        
+
         // Capping the maximum resolution to prevent browser Out-Of-Memory (TypeError on createObjectURL)
         const maxDimension = 4000;
         const currentMax = Math.max(els.templateCanvas.width, els.templateCanvas.height);
@@ -789,7 +800,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (a.photo) cx.drawImage(a.photo, a.photoX * scale, a.photoY * scale, a.photo.width * a.photoScale * scale, a.photo.height * a.photoScale * scale);
         });
         cx.drawImage(els.templateCanvas, 0, 0, els.templateCanvas.width, els.templateCanvas.height, 0, 0, c.width, c.height);
-        
+
         return new Promise((res, rej) => c.toBlob(blob => {
             if (blob) res(blob);
             else rej(new Error("Browser ran out of memory. Try refreshing the page."));
@@ -862,7 +873,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (fileData.ok) {
                     const filePath = fileData.result.file_path;
                     let finalUrl = `https://api.telegram.org/file/bot${State.tgToken}/${filePath}`;
-                    
+
                     if (State.baseUrl) {
                         const dataString = btoa(JSON.stringify({ t: State.tgToken, p: filePath }));
                         let base = State.baseUrl;

@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>HARVES Photobooth</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="interface.css">
@@ -12,6 +14,7 @@
     <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.10.0/localforage.min.js"></script>
 </head>
+
 <body>
     <div class="app-container">
         <!-- Floating Settings Button (Admin) -->
@@ -23,7 +26,7 @@
         <div class="step-content active" id="step0">
             <div class="welcome-screen">
                 <div class="welcome-content">
-                    <img src="https://harau.org/wp-content/uploads/2018/03/Small-Logo-Harau-Valley-English-School-Background.png" alt="HARVES Logo" class="welcome-logo">
+                    <img src="img/harves-logo.png" alt="HARVES Logo" class="welcome-logo">
                     <h1 class="welcome-title">HARVES PHOTOBOOTH</h1>
                     <p class="welcome-tagline">Capture Your Best Moments Instantly</p>
                     <button class="action-btn primary large-btn pulse-glow mt-4" id="btnStartApp">
@@ -45,7 +48,8 @@
                 </div>
                 <div class="step-footer">
                     <button class="action-btn outline me-3" id="btnBackToWelcome">Back</button>
-                    <button class="action-btn primary large-btn" id="btnContinueToTimer" disabled>Continue <i class="bi bi-chevron-right ms-2"></i></button>
+                    <button class="action-btn primary large-btn" id="btnContinueToTimer" disabled>Continue <i
+                            class="bi bi-chevron-right ms-2"></i></button>
                 </div>
             </div>
             <!-- Hidden canvas for thumbnail logic and temp drawing -->
@@ -61,7 +65,7 @@
                 <div class="glass-card timer-card">
                     <h2><i class="bi bi-stopwatch me-2"></i> Capture Settings</h2>
                     <p class="text-muted mb-4">Set your preparation and capture timers.</p>
-                    
+
                     <div class="setting-row">
                         <label>Enable Idle</label>
                         <input type="checkbox" id="enableIdleTime" checked>
@@ -92,8 +96,10 @@
         <div class="step-content" id="step3">
             <div class="capture-layout">
                 <div class="capture-top-bar glass-pill">
-                    <button class="icon-btn dark-btn" id="backToTimer" title="Back to Timer"><i class="bi bi-arrow-left"></i></button>
-                    <button class="icon-btn dark-btn ms-2" id="retakeAllBtn" title="Retake All"><i class="bi bi-arrow-counterclockwise"></i></button>
+                    <button class="icon-btn dark-btn" id="backToTimer" title="Back to Timer"><i
+                            class="bi bi-arrow-left"></i></button>
+                    <button class="icon-btn dark-btn ms-2" id="retakeAllBtn" title="Retake All"><i
+                            class="bi bi-arrow-counterclockwise"></i></button>
                     <div class="capture-progress" id="captureProgress">Photo 1 of 3</div>
                     <div class="capture-area-info" id="captureAreaInfo"></div>
                 </div>
@@ -146,7 +152,7 @@
                     <h2 class="text-success"><i class="bi bi-check-circle-fill me-2"></i> Looking Good!</h2>
                     <p>Share or download your moments</p>
                 </div>
-                
+
                 <div class="result-center">
                     <div class="canvas-container" id="resultCanvasSlot">
                         <!-- Canvas will be moved here -->
@@ -173,8 +179,10 @@
                     </div>
 
                     <div class="d-flex justify-content-center mt-4">
-                        <button class="action-btn outline me-3" id="backToCaptureBtn"><i class="bi bi-arrow-left"></i> Retake Photos</button>
-                        <button class="action-btn danger" id="resetAllBtn"><i class="bi bi-arrow-clockwise"></i> Start Over</button>
+                        <button class="action-btn outline me-3" id="backToCaptureBtn"><i class="bi bi-arrow-left"></i>
+                            Retake Photos</button>
+                        <button class="action-btn danger" id="resetAllBtn"><i class="bi bi-arrow-clockwise"></i> Start
+                            Over</button>
                     </div>
                 </div>
             </div>
@@ -200,31 +208,37 @@
                         </button>
                         <input type="file" id="imageInput" accept="image/*" class="d-none">
                     </div>
-                    
+
                     <div id="templatePreviewSection" style="display:none;" class="mb-4">
                         <div class="canvas-preview-box">
-                            <canvas id="previewCanvasSettings" style="max-width:100%; max-height:300px; border:1px solid #ccc;"></canvas>
+                            <canvas id="previewCanvasSettings"
+                                style="max-width:100%; max-height:300px; border:1px solid #ccc;"></canvas>
                         </div>
                         <p class="text-muted mt-2 small" id="templateStatusText">Loaded successfully.</p>
-                        
+
                         <!-- Chroma Settings (Hidden if PNG has alpha holes) -->
                         <div id="chromaSettings" style="display:none;" class="card p-3 mb-3 bg-light">
                             <label class="form-label fw-bold">Chroma Key Config (Solid BG detected)</label>
                             <div class="row g-2">
                                 <div class="col-6">
                                     <label class="form-label small">Color</label>
-                                    <input type="color" class="form-control form-control-color w-100" id="chromaColor" value="#00ff00">
+                                    <input type="color" class="form-control form-control-color w-100" id="chromaColor"
+                                        value="#00ff00">
                                 </div>
                                 <div class="col-6">
-                                    <label class="form-label small d-flex justify-content-between">Tolerance <span id="toleranceValue">20</span></label>
+                                    <label class="form-label small d-flex justify-content-between">Tolerance <span
+                                            id="toleranceValue">20</span></label>
                                     <input type="range" class="form-range" id="tolerance" min="0" max="100" value="20">
                                 </div>
                                 <div class="col-6">
-                                    <label class="form-label small d-flex justify-content-between">Min Area <span id="minAreaValue">500</span></label>
-                                    <input type="range" class="form-range" id="minArea" min="100" max="5000" value="500" step="100">
+                                    <label class="form-label small d-flex justify-content-between">Min Area <span
+                                            id="minAreaValue">500</span></label>
+                                    <input type="range" class="form-range" id="minArea" min="100" max="5000" value="500"
+                                        step="100">
                                 </div>
                                 <div class="col-6">
-                                    <label class="form-label small d-flex justify-content-between">Feathering <span id="featheringValue">2</span></label>
+                                    <label class="form-label small d-flex justify-content-between">Feathering <span
+                                            id="featheringValue">2</span></label>
                                     <input type="range" class="form-range" id="feathering" min="0" max="10" value="2">
                                 </div>
                             </div>
@@ -232,7 +246,8 @@
 
                         <div class="d-flex gap-2">
                             <button class="btn btn-warning" id="btnDetectPreview">Test Detect Areas</button>
-                            <button class="btn btn-success" id="btnSaveTemplatePreview" disabled>Save to Library</button>
+                            <button class="btn btn-success" id="btnSaveTemplatePreview" disabled>Save to
+                                Library</button>
                         </div>
                     </div>
 
@@ -243,7 +258,9 @@
                     <div class="row g-3 mb-4">
                         <div class="col-md-6">
                             <label class="form-label small">Device</label>
-                            <select id="cameraSelect" class="form-select"><option value="">Select Camera</option></select>
+                            <select id="cameraSelect" class="form-select">
+                                <option value="">Select Camera</option>
+                            </select>
                         </div>
                         <div class="col-md-4">
                             <label class="form-label small">Resolution</label>
@@ -260,7 +277,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <hr>
 
                     <!-- Telegram Integration -->
@@ -271,21 +288,25 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label small">Channel Link</label>
-                        <input type="text" class="form-control" id="telegramChannelLink" placeholder="https://t.me/s/yourchannel">
+                        <input type="text" class="form-control" id="telegramChannelLink"
+                            placeholder="https://t.me/s/yourchannel">
                     </div>
                     <div class="mb-3">
                         <label class="form-label small">Hosting Base URL (For QR Redirect)</label>
-                        <input type="text" class="form-control" id="hostingBaseUrl" placeholder="https://yourdomain.com (Leave empty for direct link)">
+                        <input type="text" class="form-control" id="hostingBaseUrl"
+                            placeholder="https://yourdomain.com (Leave empty for direct link)">
                     </div>
 
                     <hr class="mt-4 mb-4">
-                    
+
                     <!-- Danger Zone -->
                     <h6 class="mb-3 text-danger"><i class="bi bi-exclamation-triangle"></i> Danger Zone</h6>
-                    <div class="d-flex justify-content-between align-items-center bg-light p-3 rounded border border-danger border-opacity-25">
+                    <div
+                        class="d-flex justify-content-between align-items-center bg-light p-3 rounded border border-danger border-opacity-25">
                         <div>
                             <strong class="d-block text-danger mb-1">Factory Reset</strong>
-                            <span class="small text-muted">Deletes all templates, settings, and requires camera permission again.</span>
+                            <span class="small text-muted">Deletes all templates, settings, and requires camera
+                                permission again.</span>
                         </div>
                         <button class="btn btn-outline-danger" id="factoryResetBtn">Reset All Data</button>
                     </div>
@@ -338,4 +359,5 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="main.js"></script>
 </body>
+
 </html>
