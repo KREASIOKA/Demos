@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>HARVES Photobooth</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="interface.css">
+    <script src="gif.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.10.0/localforage.min.js"></script>
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Floating Settings Button (Admin) -->
+        <button class="icon-btn settings-floating" id="settingsBtn" title="Admin Settings">
+            <i class="bi bi-gear-fill"></i>
+        </button>
+
+        <!-- ==================== STEP 0: WELCOME ==================== -->
+        <div class="step-content active" id="step0">
+            <div class="welcome-screen">
+                <div class="welcome-content">
+                    <img src="img/harves-logo.png" alt="HARVES Logo" class="welcome-logo">
+                    <h1 class="welcome-title">HARVES PHOTOBOOTH</h1>
+                    <p class="welcome-tagline">Capture Your Best Moments Instantly</p>
+                    <button class="action-btn primary large-btn pulse-glow mt-4" id="btnStartApp">
+                        START PHOTOBOOTH <i class="bi bi-arrow-right ms-2"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== STEP 1: TEMPLATE LIBRARY ==================== -->
+        <div class="step-content" id="step1">
+            <div class="fullscreen-layout">
+                <div class="step-header">
+                    <h2>Select a Frame</h2>
+                    <p>Choose your favorite template to begin</p>
+                </div>
+                <div class="template-gallery-large" id="templateGallery">
+                    <!-- Thumbnails will be injected here via JS -->
+                </div>
+                <div class="step-footer">
+                    <button class="action-btn outline me-3" id="btnBackToWelcome">Back</button>
+                    <button class="action-btn primary large-btn" id="btnContinueToTimer" disabled>Continue <i
+                            class="bi bi-chevron-right ms-2"></i></button>
+                </div>
+            </div>
+            <!-- Hidden canvas for thumbnail logic and temp drawing -->
+            <div class="d-none">
+                <canvas id="photoCanvas"></canvas>
+                <canvas id="templateCanvas"></canvas>
+            </div>
+        </div>
+
+        <!-- ==================== STEP 2: TIMER SETTINGS ==================== -->
+        <div class="step-content" id="step2">
+            <div class="fullscreen-layout centered-layout">
+                <div class="glass-card timer-card">
+                    <h2><i class="bi bi-stopwatch me-2"></i> Capture Settings</h2>
+                    <p class="text-muted mb-4">Set your preparation and capture timers.</p>
+
+                    <div class="setting-row">
+                        <label>Enable Idle</label>
+                        <input type="checkbox" id="enableIdleTime" checked>
+                    </div>
+                    <div class="setting-row" id="idleTimeRow">
+                        <label>Idle Time (s)</label>
+                        <input type="range" id="idleTime" min="3" max="30" value="10">
+                        <span class="rv" id="idleTimeValue">10</span>
+                    </div>
+                    <hr class="glass-divider">
+                    <div class="setting-row">
+                        <label>Countdown</label>
+                        <input type="range" id="countdownTime" min="1" max="10" value="3">
+                        <span class="rv" id="countdownTimeValue">3</span>
+                    </div>
+
+                    <div class="d-flex gap-3 mt-5">
+                        <button class="action-btn outline" id="btnBackToTemplate">Back</button>
+                        <button class="action-btn success large-btn" id="btnStartCapture">
+                            Start Capture <i class="bi bi-camera-fill ms-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== STEP 3: CAPTURE ==================== -->
+        <div class="step-content" id="step3">
+            <div class="capture-layout">
+                <div class="capture-top-bar glass-pill">
+                    <button class="icon-btn dark-btn" id="backToTimer" title="Back to Timer"><i
+                            class="bi bi-arrow-left"></i></button>
+                    <button class="icon-btn dark-btn ms-2" id="retakeAllBtn" title="Retake All"><i
+                            class="bi bi-arrow-counterclockwise"></i></button>
+                    <div class="capture-progress" id="captureProgress">Photo 1 of 3</div>
+                    <div class="capture-area-info" id="captureAreaInfo"></div>
+                </div>
+                <div class="camera-viewport" id="cameraViewport">
+                    <video id="webcamVideo" autoplay playsinline></video>
+                    <canvas id="captureOverlay"></canvas>
+                    <div class="countdown-display" id="countdownDisplay"></div>
+                    <div class="countdown-message" id="countdownMessage"></div>
+                    <div class="flash-overlay" id="flashOverlay"></div>
+                </div>
+                <!-- Controls for manual intervention (hidden during auto) -->
+                <div class="capture-bottom-bar glass-pill-bottom" style="display:none" id="manualControls">
+                    <button class="action-btn outline small dark-btn" id="autoCaptureBtn">
+                        <i class="bi bi-play-circle"></i> Resume Auto
+                    </button>
+                    <button class="capture-btn" id="captureBtn" title="Capture Photo">
+                        <div class="capture-btn-inner"></div>
+                    </button>
+                </div>
+
+                <!-- Review Overlay -->
+                <div class="review-overlay glass-overlay" id="reviewOverlay">
+                    <div class="review-box mac-window">
+                        <div class="mac-header">
+                            <div class="mac-dots"><span></span><span></span><span></span></div>
+                            <div class="mac-title">Review Photo</div>
+                        </div>
+                        <div class="review-content">
+                            <div class="review-img-wrap">
+                                <canvas id="reviewCanvas"></canvas>
+                            </div>
+                            <div class="review-actions">
+                                <button class="review-btn retake" id="retakeBtn">
+                                    <i class="bi bi-arrow-repeat"></i> Retake
+                                </button>
+                                <button class="review-btn accept" id="acceptBtn">
+                                    <i class="bi bi-check-lg"></i> Accept
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== STEP 4: RESULT ==================== -->
+        <div class="step-content" id="step4">
+            <div class="fullscreen-layout">
+                <div class="step-header text-center">
+                    <h2 class="text-success"><i class="bi bi-check-circle-fill me-2"></i> Looking Good!</h2>
+                    <p>Share or download your moments</p>
+                </div>
+
+                <div class="result-center">
+                    <div class="canvas-container" id="resultCanvasSlot">
+                        <!-- Canvas will be moved here -->
+                    </div>
+                </div>
+
+                <div class="result-actions glass-panel-horizontal">
+                    <div class="d-flex gap-3 justify-content-center mb-3">
+                        <button class="action-btn telegram-btn" id="sendTelegramBtn">
+                            <i class="bi bi-qr-code-scan"></i> Generate QR Code
+                        </button>
+                        <button class="action-btn gif-btn" id="createGifBtn">
+                            <i class="bi bi-filetype-gif"></i> Create GIF
+                        </button>
+                        <button class="action-btn primary" id="exportBtn">
+                            <i class="bi bi-download"></i> Save Image
+                        </button>
+                    </div>
+
+                    <!-- QR Code Section -->
+                    <div class="qr-card" id="qrSection" style="display:none">
+                        <div class="qr-container" id="qrCodeContainer"></div>
+                        <p class="qr-url mt-2" id="qrUrl">Scan to View Photo</p>
+                    </div>
+
+                    <div class="d-flex justify-content-center mt-4">
+                        <button class="action-btn outline me-3" id="backToCaptureBtn"><i class="bi bi-arrow-left"></i>
+                            Retake Photos</button>
+                        <button class="action-btn danger" id="resetAllBtn"><i class="bi bi-arrow-clockwise"></i> Start
+                            Over</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ==================== MODALS ==================== -->
+    <!-- Settings Modal -->
+    <div class="modal fade" id="settingsModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content mac-window">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="bi bi-gear"></i> Admin Settings</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Template Management -->
+                    <h6 class="mb-3"><i class="bi bi-cloud-arrow-up"></i> Template Management</h6>
+                    <div class="d-flex gap-3 mb-3">
+                        <button class="btn btn-outline-primary" id="loadImageBtn">
+                            <i class="bi bi-image"></i> Load Image
+                        </button>
+                        <input type="file" id="imageInput" accept="image/*" class="d-none">
+                    </div>
+
+                    <div id="templatePreviewSection" style="display:none;" class="mb-4">
+                        <div class="canvas-preview-box">
+                            <canvas id="previewCanvasSettings"
+                                style="max-width:100%; max-height:300px; border:1px solid #ccc;"></canvas>
+                        </div>
+                        <p class="text-muted mt-2 small" id="templateStatusText">Loaded successfully.</p>
+
+                        <!-- Chroma Settings (Hidden if PNG has alpha holes) -->
+                        <div id="chromaSettings" style="display:none;" class="card p-3 mb-3 bg-light">
+                            <label class="form-label fw-bold">Chroma Key Config (Solid BG detected)</label>
+                            <div class="row g-2">
+                                <div class="col-6">
+                                    <label class="form-label small">Color</label>
+                                    <input type="color" class="form-control form-control-color w-100" id="chromaColor"
+                                        value="#00ff00">
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label small d-flex justify-content-between">Tolerance <span
+                                            id="toleranceValue">20</span></label>
+                                    <input type="range" class="form-range" id="tolerance" min="0" max="100" value="20">
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label small d-flex justify-content-between">Min Area <span
+                                            id="minAreaValue">500</span></label>
+                                    <input type="range" class="form-range" id="minArea" min="100" max="5000" value="500"
+                                        step="100">
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label small d-flex justify-content-between">Feathering <span
+                                            id="featheringValue">2</span></label>
+                                    <input type="range" class="form-range" id="feathering" min="0" max="10" value="2">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-warning" id="btnDetectPreview">Test Detect Areas</button>
+                            <button class="btn btn-success" id="btnSaveTemplatePreview" disabled>Save to
+                                Library</button>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <!-- Camera -->
+                    <h6 class="mb-3"><i class="bi bi-camera-video"></i> Camera Device</h6>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label small">Device</label>
+                            <select id="cameraSelect" class="form-select">
+                                <option value="">Select Camera</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small">Resolution</label>
+                            <select id="resolutionSelect" class="form-select">
+                                <option value="640x480">640×480</option>
+                                <option value="1280x720" selected>1280×720 HD</option>
+                                <option value="1920x1080">1920×1080 FHD</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2 d-flex align-items-end">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="mirrorCamera" checked>
+                                <label class="form-check-label small">Mirror</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <!-- Telegram Integration -->
+                    <h6 class="mb-3"><i class="bi bi-telegram"></i> Telegram API</h6>
+                    <div class="mb-3">
+                        <label class="form-label small">Bot Token</label>
+                        <input type="text" class="form-control" id="telegramBotToken" placeholder="123456:ABC-DEF...">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small">Channel Link</label>
+                        <input type="text" class="form-control" id="telegramChannelLink"
+                            placeholder="https://t.me/s/yourchannel">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small">Hosting Base URL (For QR Redirect)</label>
+                        <input type="text" class="form-control" id="hostingBaseUrl"
+                            placeholder="https://yourdomain.com (Leave empty for direct link)">
+                    </div>
+
+                    <hr class="mt-4 mb-4">
+
+                    <!-- Danger Zone -->
+                    <h6 class="mb-3 text-danger"><i class="bi bi-exclamation-triangle"></i> Danger Zone</h6>
+                    <div
+                        class="d-flex justify-content-between align-items-center bg-light p-3 rounded border border-danger border-opacity-25">
+                        <div>
+                            <strong class="d-block text-danger mb-1">Factory Reset</strong>
+                            <span class="small text-muted">Deletes all templates, settings, and requires camera
+                                permission again.</span>
+                        </div>
+                        <button class="btn btn-outline-danger" id="factoryResetBtn">Reset All Data</button>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="saveSettings">Save Global Settings</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Modal (unchanged just for safety) -->
+    <div class="modal fade" id="exportModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content mac-window">
+                <div class="modal-header">
+                    <h5 class="modal-title">Export Image</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">File Name</label>
+                        <input type="text" class="form-control" id="exportFileName" value="photobooth-result">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Quality (DPI)</label>
+                        <select class="form-select" id="exportDPI">
+                            <option value="300">300 DPI</option>
+                            <option value="600" selected>600 DPI</option>
+                            <option value="1200">1200 DPI</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="confirmExport">Export</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay glass-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <p id="loadingText" class="fw-semibold">Processing...</p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="main.js"></script>
+</body>
+
+</html>
