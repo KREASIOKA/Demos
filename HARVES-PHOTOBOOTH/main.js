@@ -30,11 +30,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const $ = id => document.getElementById(id);
     const $$ = selector => document.querySelectorAll(selector);
     const show = (el, show = true) => el && (el.style.display = show ? 'flex' : 'none');
-    
+
     // --- DOM ELEMENTS ---
     const els = {
         steps: [$('step0'), $('step1'), $('step2'), $('step3'), $('step4')],
-        
+
         // Settings / Floating
         settingsBtn: $('settingsBtn'),
         settingsModal: new bootstrap.Modal($('settingsModal')),
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
         tgChannelInput: $('telegramChannelLink'),
         saveSettingsBtn: $('saveSettings'),
         factoryResetBtn: $('factoryResetBtn'),
-        
+
         // Admin Upload
         loadImageBtn: $('loadImageBtn'),
         imageInput: $('imageInput'),
@@ -52,19 +52,19 @@ document.addEventListener('DOMContentLoaded', () => {
         chromaSettings: $('chromaSettings'),
         btnDetectPreview: $('btnDetectPreview'),
         btnSaveTemplatePreview: $('btnSaveTemplatePreview'),
-        
+
         // Step 0: Welcome
         btnStartApp: $('btnStartApp'),
-        
+
         // Step 1: Template Library
         templateGallery: $('templateGallery'),
         btnBackToWelcome: $('btnBackToWelcome'),
         btnContinueToTimer: $('btnContinueToTimer'),
-        
+
         // Hidden Canvases
         photoCanvas: $('photoCanvas'),
         templateCanvas: $('templateCanvas'),
-        
+
         // Step 2: Timer
         enableIdle: $('enableIdleTime'),
         idleTime: $('idleTime'),
@@ -72,12 +72,12 @@ document.addEventListener('DOMContentLoaded', () => {
         idleRow: $('idleTimeRow'),
         btnBackToTemplate: $('btnBackToTemplate'),
         btnStartCapture: $('btnStartCapture'),
-        
+
         // Camera Config (Admin)
         cameraSelect: $('cameraSelect'),
         resolutionSelect: $('resolutionSelect'),
         mirrorCamera: $('mirrorCamera'),
-        
+
         // Step 3: Capture
         captureProgress: $('captureProgress'),
         captureAreaInfo: $('captureAreaInfo'),
@@ -95,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
         acceptBtn: $('acceptBtn'),
         backToTimer: $('backToTimer'),
         retakeAllBtn: $('retakeAllBtn'),
-        
+
         // Step 4: Result
         resultCanvasSlot: $('resultCanvasSlot'),
         exportBtn: $('exportBtn'),
@@ -107,13 +107,13 @@ document.addEventListener('DOMContentLoaded', () => {
         backToCaptureBtn: $('backToCaptureBtn'),
         resetAllBtn: $('resetAllBtn'),
         exportModal: new bootstrap.Modal($('exportModal')),
-        
+
         // Chroma Key controls
         chromaColor: $('chromaColor'),
         tolerance: $('tolerance'),
         minArea: $('minArea'),
         feathering: $('feathering'),
-        
+
         loadingOverlay: $('loadingOverlay'),
         loadingText: $('loadingText')
     };
@@ -129,8 +129,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const withLoading = async (msg, task) => {
         els.loadingText.textContent = msg;
         els.loadingOverlay.style.display = 'flex';
-        await new Promise(r => setTimeout(r, 50)); 
-        try { await task(); } catch(e) { alert('Error: ' + e.message); console.error(e); }
+        await new Promise(r => setTimeout(r, 50));
+        try { await task(); } catch (e) { alert('Error: ' + e.message); console.error(e); }
         els.loadingOverlay.style.display = 'none';
     };
 
@@ -141,15 +141,15 @@ document.addEventListener('DOMContentLoaded', () => {
         if (State.step === stepIdx) return;
         const currentEl = els.steps[State.step];
         const nextEl = els.steps[stepIdx];
-        
+
         State.step = stepIdx;
-        
+
         if (currentEl) {
             currentEl.classList.add('step-leave');
             await delay(300);
             currentEl.classList.remove('active', 'step-leave');
         }
-        
+
         if (nextEl) {
             nextEl.classList.add('active', 'step-enter');
             await delay(50);
@@ -184,7 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (cw / ch > tAsp) rw = ch * tAsp; else rh = cw / tAsp;
             els.resultCanvasSlot.style.width = rw + 'px';
             els.resultCanvasSlot.style.height = rh + 'px';
-            [els.templateCanvas, els.photoCanvas].forEach(c => { c.style.width = rw+'px'; c.style.height = rh+'px'; });
+            [els.templateCanvas, els.photoCanvas].forEach(c => { c.style.width = rw + 'px'; c.style.height = rh + 'px'; });
             els.qrSection.style.display = 'none';
         }
     };
@@ -196,11 +196,11 @@ document.addEventListener('DOMContentLoaded', () => {
     els.btnBackToTemplate.onclick = () => goToStep(1);
     els.btnStartCapture.onclick = () => goToStep(3);
     els.backToTimer.onclick = () => { stopAutoCapture(); goToStep(2); };
-    els.backToCaptureBtn.onclick = () => { State.areas.forEach(a=>a.photo=null); goToStep(3); };
+    els.backToCaptureBtn.onclick = () => { State.areas.forEach(a => a.photo = null); goToStep(3); };
     els.resetAllBtn.onclick = () => {
         State.activeTemplateId = null; State.template = null; State.areas = [];
-        ctx.photo.clearRect(0,0,els.photoCanvas.width,els.photoCanvas.height);
-        ctx.template.clearRect(0,0,els.templateCanvas.width,els.templateCanvas.height);
+        ctx.photo.clearRect(0, 0, els.photoCanvas.width, els.photoCanvas.height);
+        ctx.template.clearRect(0, 0, els.templateCanvas.width, els.templateCanvas.height);
         goToStep(0);
     };
 
@@ -209,36 +209,36 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             State.templates = [];
             await localforage.iterate((value) => { State.templates.push(value); });
-            
+
             // Auto-inject a default template if none exist
             if (State.templates.length === 0) {
                 const defCanvas = document.createElement('canvas');
                 defCanvas.width = 1080; defCanvas.height = 1920;
                 const dct = defCanvas.getContext('2d');
                 dct.fillStyle = '#F2C94C'; // HARVES Yellow
-                dct.fillRect(0,0,1080,1920);
+                dct.fillRect(0, 0, 1080, 1920);
                 dct.fillStyle = '#fffdf7'; // HARVES White
-                dct.fillRect(40,40,1000,1840);
-                
+                dct.fillRect(40, 40, 1000, 1840);
+
                 // Draw some text
                 dct.fillStyle = '#1d1d1f';
                 dct.font = 'bold 60px Inter, sans-serif';
                 dct.textAlign = 'center';
                 dct.fillText('HARVES PHOTOBOOTH', 540, 1850);
-                
+
                 // Cut out 3 photo areas
                 dct.globalCompositeOperation = 'destination-out';
-                for(let i=0; i<3; i++) dct.fillRect(90, 120 + i*530, 900, 500);
-                
+                for (let i = 0; i < 3; i++) dct.fillRect(90, 120 + i * 530, 900, 500);
+
                 const defData = defCanvas.toDataURL('image/png');
                 const defId = 'tpl_default';
                 const defTpl = {
                     id: defId, timestamp: Date.now(),
                     imageDataUrl: defData, thumbDataUrl: defData,
                     areas: [
-                        {id:1, bounds:{x:90,y:120,w:900,h:500}, photoX:90, photoY:120, photoScale:1},
-                        {id:2, bounds:{x:90,y:650,w:900,h:500}, photoX:90, photoY:650, photoScale:1},
-                        {id:3, bounds:{x:90,y:1180,w:900,h:500}, photoX:90, photoY:1180, photoScale:1}
+                        { id: 1, bounds: { x: 90, y: 120, w: 900, h: 500 }, photoX: 90, photoY: 120, photoScale: 1 },
+                        { id: 2, bounds: { x: 90, y: 650, w: 900, h: 500 }, photoX: 90, photoY: 650, photoScale: 1 },
+                        { id: 3, bounds: { x: 90, y: 1180, w: 900, h: 500 }, photoX: 90, photoY: 1180, photoScale: 1 }
                     ]
                 };
                 await localforage.setItem(defId, defTpl);
@@ -259,7 +259,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Render skeletons first
         els.templateGallery.innerHTML = State.templates.map((t, i) => `
             <div class="template-thumb-card skeleton ${State.activeTemplateId === t.id ? 'selected' : ''}" data-id="${t.id}">
-                <img alt="Template ${i+1}">
+                <img alt="Template ${i + 1}">
                 <div class="template-info"><i class="bi bi-camera-fill"></i> ${t.areas.length} Photo${t.areas.length > 1 ? 's' : ''}</div>
                 <button class="template-delete-btn" data-id="${t.id}" title="Delete"><i class="bi bi-trash"></i></button>
             </div>
@@ -290,7 +290,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const tpl = State.templates.find(x => x.id === card.dataset.id);
                 if (!tpl) return;
                 State.activeTemplateId = tpl.id;
-                State.areas = (tpl.areas || []).map(a => ({...a, photo: null}));
+                State.areas = (tpl.areas || []).map(a => ({ ...a, photo: null }));
                 const tImg = new Image();
                 tImg.onload = () => {
                     State.template = tImg;
@@ -346,31 +346,31 @@ document.addEventListener('DOMContentLoaded', () => {
     els.imageInput.onchange = e => {
         const file = e.target.files[0];
         if (!file) return;
-        
+
         els.templatePreviewSection.style.display = 'block';
         els.btnSaveTemplatePreview.disabled = true;
         els.chromaSettings.style.display = 'none';
         els.templateStatusText.textContent = "Analyzing image...";
         els.templateStatusText.className = "text-warning mt-2 small fw-bold";
-        
+
         const img = new Image();
         img.onload = () => {
             State.adminRawTemplate = img;
             els.previewCanvasSettings.width = img.width;
             els.previewCanvasSettings.height = img.height;
             ctx.preview.drawImage(img, 0, 0);
-            
+
             // Check Alpha
             const imgData = ctx.preview.getImageData(0, 0, img.width, img.height);
             const data = imgData.data;
             let hasTransparency = false;
             const mask = new Uint8Array(img.width * img.height);
-            
+
             for (let i = 0; i < data.length; i += 4) {
-                if (data[i+3] < 50) {
+                if (data[i + 3] < 50) {
                     hasTransparency = true;
-                    mask[i/4] = 1;
-                    data[i+3] = 0;
+                    mask[i / 4] = 1;
+                    data[i + 3] = 0;
                 }
             }
 
@@ -380,7 +380,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 ctx.preview.putImageData(imgData, 0, 0);
                 const areas = detectAreas(mask, img.width, img.height, 500);
                 State.adminAreas = areas;
-                
+
                 els.templateStatusText.textContent = `Smart Detect: Transparent PNG recognized! Found ${areas.length} photo area(s).`;
                 els.templateStatusText.className = "text-success mt-2 small fw-bold";
                 els.btnSaveTemplatePreview.disabled = areas.length === 0;
@@ -398,28 +398,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const detectAreas = (mask, w, h, minAreaSize) => {
         const areas = [];
         const visited = new Uint8Array(w * h);
-        
+
         for (let y = 0; y < h; y++) {
             for (let x = 0; x < w; x++) {
-                const idx = y*w+x;
+                const idx = y * w + x;
                 if (mask[idx] && !visited[idx]) {
-                    const stack = [{x, y}];
+                    const stack = [{ x, y }];
                     let minX = w, minY = h, maxX = 0, maxY = 0, count = 0;
-                    
+
                     while (stack.length) {
                         const p = stack.pop();
-                        const pi = p.y*w+p.x;
-                        if (p.x<0 || p.x>=w || p.y<0 || p.y>=h || visited[pi] || !mask[pi]) continue;
+                        const pi = p.y * w + p.x;
+                        if (p.x < 0 || p.x >= w || p.y < 0 || p.y >= h || visited[pi] || !mask[pi]) continue;
                         visited[pi] = 1; count++;
                         if (p.x < minX) minX = p.x; if (p.x > maxX) maxX = p.x;
                         if (p.y < minY) minY = p.y; if (p.y > maxY) maxY = p.y;
-                        stack.push({x:p.x+1, y:p.y}, {x:p.x-1, y:p.y}, {x:p.x, y:p.y+1}, {x:p.x, y:p.y-1});
+                        stack.push({ x: p.x + 1, y: p.y }, { x: p.x - 1, y: p.y }, { x: p.x, y: p.y + 1 }, { x: p.x, y: p.y - 1 });
                     }
-                    
+
                     if (count >= minAreaSize) {
                         areas.push({
                             id: areas.length + 1,
-                            bounds: { x: minX, y: minY, w: maxX-minX+1, h: maxY-minY+1 },
+                            bounds: { x: minX, y: minY, w: maxX - minX + 1, h: maxY - minY + 1 },
                             photo: null, photoX: minX, photoY: minY, photoScale: 1.0
                         });
                     }
@@ -463,21 +463,21 @@ document.addEventListener('DOMContentLoaded', () => {
         const imgData = canvasCtx.getImageData(0, 0, w, h);
         const data = imgData.data;
         const hex = els.chromaColor.value;
-        const cR = parseInt(hex.substr(1,2),16), cG = parseInt(hex.substr(3,2),16), cB = parseInt(hex.substr(5,2),16);
+        const cR = parseInt(hex.substr(1, 2), 16), cG = parseInt(hex.substr(3, 2), 16), cB = parseInt(hex.substr(5, 2), 16);
         const tol = parseInt(els.tolerance.value);
         const mask = new Uint8Array(w * h);
         for (let i = 0; i < data.length; i += 4) {
-            const r = data[i], g = data[i+1], b = data[i+2];
-            if (Math.sqrt((r-cR)**2*0.3 + (g-cG)**2*0.6 + (b-cB)**2*0.1) <= tol) {
-                mask[i/4] = 1; data[i+3] = 0;
+            const r = data[i], g = data[i + 1], b = data[i + 2];
+            if (Math.sqrt((r - cR) ** 2 * 0.3 + (g - cG) ** 2 * 0.6 + (b - cB) ** 2 * 0.1) <= tol) {
+                mask[i / 4] = 1; data[i + 3] = 0;
             }
         }
         const feather = parseInt(els.feathering.value);
         if (feather > 0) {
             const exp = new Uint8Array(w * h);
-            for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) if (mask[y*w+x]) {
+            for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) if (mask[y * w + x]) {
                 for (let dy = -feather; dy <= feather; dy++) for (let dx = -feather; dx <= feather; dx++) {
-                    if (x+dx>=0 && x+dx<w && y+dy>=0 && y+dy<h) { exp[(y+dy)*w+(x+dx)] = 1; data[((y+dy)*w+(x+dx))*4+3] = 0; }
+                    if (x + dx >= 0 && x + dx < w && y + dy >= 0 && y + dy < h) { exp[(y + dy) * w + (x + dx)] = 1; data[((y + dy) * w + (x + dx)) * 4 + 3] = 0; }
                 }
             }
             mask.set(exp);
@@ -490,19 +490,19 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!State.adminRawTemplate || State.adminAreas.length === 0) return;
         withLoading('Saving Template...', async () => {
             // Produce clean transparent template
-            ctx.preview.clearRect(0,0,els.previewCanvasSettings.width,els.previewCanvasSettings.height);
+            ctx.preview.clearRect(0, 0, els.previewCanvasSettings.width, els.previewCanvasSettings.height);
             ctx.preview.drawImage(State.adminRawTemplate, 0, 0);
             if (!State.adminHasTransparency) applyChromaMask(ctx.preview, State.adminRawTemplate);
             else {
                 // Re-apply alpha cleanup for transparent PNGs
-                const id2 = ctx.preview.getImageData(0,0,els.previewCanvasSettings.width,els.previewCanvasSettings.height);
-                for (let i=0;i<id2.data.length;i+=4) if(id2.data[i+3]<50) id2.data[i+3]=0;
-                ctx.preview.putImageData(id2,0,0);
+                const id2 = ctx.preview.getImageData(0, 0, els.previewCanvasSettings.width, els.previewCanvasSettings.height);
+                for (let i = 0; i < id2.data.length; i += 4) if (id2.data[i + 3] < 50) id2.data[i + 3] = 0;
+                ctx.preview.putImageData(id2, 0, 0);
             }
             let transparentDataUrl;
             try {
                 transparentDataUrl = els.previewCanvasSettings.toDataURL('image/png');
-            } catch(e) {
+            } catch (e) {
                 alert("Security Error saving template image. Please ensure you are running this via a local server (http://localhost) and not directly from the file system (file:///) to avoid CORS issues.");
                 return;
             }
@@ -523,18 +523,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (!mockImg || !mockImg.complete || !mockImg.naturalWidth) return;
                     const mAsp = mockImg.width / mockImg.height, aAsp = a.bounds.w / a.bounds.h;
                     let dw, dh, dx, dy;
-                    if (mAsp > aAsp) { dh = a.bounds.h; dw = dh * mAsp; dx = a.bounds.x-(dw-a.bounds.w)/2; dy = a.bounds.y; }
-                    else { dw = a.bounds.w; dh = dw / mAsp; dx = a.bounds.x; dy = a.bounds.y-(dh-a.bounds.h)/2; }
-                    tc.drawImage(mockImg, dx*scale, dy*scale, dw*scale, dh*scale);
+                    if (mAsp > aAsp) { dh = a.bounds.h; dw = dh * mAsp; dx = a.bounds.x - (dw - a.bounds.w) / 2; dy = a.bounds.y; }
+                    else { dw = a.bounds.w; dh = dw / mAsp; dx = a.bounds.x; dy = a.bounds.y - (dh - a.bounds.h) / 2; }
+                    tc.drawImage(mockImg, dx * scale, dy * scale, dw * scale, dh * scale);
                 });
-            } catch(e) { console.warn("Could not draw mockups:", e); }
-            
+            } catch (e) { console.warn("Could not draw mockups:", e); }
+
             tc.drawImage(els.previewCanvasSettings, 0, 0, thumbCanvas.width, thumbCanvas.height);
-            
+
             let thumbDataUrl;
             try {
                 thumbDataUrl = thumbCanvas.toDataURL('image/jpeg', 0.9);
-            } catch(e) {
+            } catch (e) {
                 console.warn("Canvas tainted by mockups, falling back to raw template thumb.");
                 thumbDataUrl = transparentDataUrl; // fallback
             }
@@ -556,7 +556,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- CAMERA ---
     navigator.mediaDevices.enumerateDevices().then(devices => {
         const cams = devices.filter(d => d.kind === 'videoinput');
-        els.cameraSelect.innerHTML = '<option value="">Select Camera</option>' + cams.map((c,i) => `<option value="${c.deviceId}">${c.label || 'Cam '+(i+1)}</option>`).join('');
+        els.cameraSelect.innerHTML = '<option value="">Select Camera</option>' + cams.map((c, i) => `<option value="${c.deviceId}">${c.label || 'Cam ' + (i + 1)}</option>`).join('');
     });
 
     const startCamera = () => {
@@ -574,16 +574,15 @@ document.addEventListener('DOMContentLoaded', () => {
             els.webcamVideo.onloadedmetadata = () => {
                 els.captureOverlay.width = els.webcamVideo.videoWidth;
                 els.captureOverlay.height = els.webcamVideo.videoHeight;
-                if(State.step === 3) updateCaptureOverlay();
+                if (State.step === 3) updateCaptureOverlay();
             };
         });
     };
-    
+
     const updateMirror = () => {
         els.webcamVideo.style.transform = els.mirrorCamera.checked ? 'scaleX(-1)' : 'none';
-        els.reviewCanvas.style.transform = els.mirrorCamera.checked ? 'scaleX(-1)' : 'none';
     };
-    els.mirrorCamera.onchange = () => { if(State.step===0) updateMirror(); }; // Handled by settings save normally
+    els.mirrorCamera.onchange = () => { if (State.step === 0) updateMirror(); }; // Handled by settings save normally
 
     const resizeCanvas = (container) => {
         if (!State.template) return;
@@ -601,7 +600,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let rw = parent.clientWidth, rh = parent.clientHeight;
         if (rw / rh > tAsp) rw = rh * tAsp; else rh = rw / tAsp;
         slot.style.width = rw + 'px'; slot.style.height = rh + 'px';
-        [els.templateCanvas, els.photoCanvas].forEach(c => { c.style.width = rw+'px'; c.style.height = rh+'px'; });
+        [els.templateCanvas, els.photoCanvas].forEach(c => { c.style.width = rw + 'px'; c.style.height = rh + 'px'; });
     });
 
     // --- TIMERS & RANGES ---
@@ -613,7 +612,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- CAPTURE FLOW (STEP 3) ---
     const setupCaptureForCurrentArea = () => {
-        if(State.currentAreaIdx >= State.areas.length) return goToStep(4);
+        if (State.currentAreaIdx >= State.areas.length) return goToStep(4);
         const area = State.areas[State.currentAreaIdx];
         els.captureProgress.textContent = `Photo ${State.currentAreaIdx + 1} of ${State.areas.length}`;
         els.captureAreaInfo.textContent = `Area ${area.id}`;
@@ -623,24 +622,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const updateCaptureOverlay = () => {
         if (!els.webcamVideo.videoWidth || State.currentAreaIdx < 0 || State.currentAreaIdx >= State.areas.length) return;
         const area = State.areas[State.currentAreaIdx];
-        ctx.overlay.clearRect(0,0, els.captureOverlay.width, els.captureOverlay.height);
-        
+        ctx.overlay.clearRect(0, 0, els.captureOverlay.width, els.captureOverlay.height);
+
         const vidAsp = els.captureOverlay.width / els.captureOverlay.height;
         const areaAsp = area.bounds.w / area.bounds.h;
         let bw, bh;
-        if (vidAsp > areaAsp) { bh = els.captureOverlay.height; bw = bh * areaAsp; } 
+        if (vidAsp > areaAsp) { bh = els.captureOverlay.height; bw = bh * areaAsp; }
         else { bw = els.captureOverlay.width; bh = bw / areaAsp; }
-        
+
         const bx = (els.captureOverlay.width - bw) / 2;
         const by = (els.captureOverlay.height - bh) / 2;
-        
+
         ctx.overlay.fillStyle = 'rgba(0,0,0,0.7)';
-        ctx.overlay.fillRect(0,0, els.captureOverlay.width, els.captureOverlay.height);
+        ctx.overlay.fillRect(0, 0, els.captureOverlay.width, els.captureOverlay.height);
         ctx.overlay.clearRect(bx, by, bw, bh);
         ctx.overlay.strokeStyle = 'rgba(255, 255, 255, 0.8)';
         ctx.overlay.lineWidth = 4;
         ctx.overlay.strokeRect(bx, by, bw, bh);
-        State.dimBox = {x:bx, y:by, w:bw, h:bh};
+        State.dimBox = { x: bx, y: by, w: bw, h: bh };
     };
 
     els.retakeAllBtn.onclick = () => {
@@ -655,17 +654,17 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!State.dimBox) return;
         els.flashOverlay.classList.add('flash');
         setTimeout(() => els.flashOverlay.classList.remove('flash'), 100);
-        
+
         const tmp = document.createElement('canvas');
         tmp.width = State.dimBox.w; tmp.height = State.dimBox.h;
         const tctx = tmp.getContext('2d');
         if (els.mirrorCamera.checked) { tctx.translate(tmp.width, 0); tctx.scale(-1, 1); }
         tctx.drawImage(els.webcamVideo, State.dimBox.x, State.dimBox.y, State.dimBox.w, State.dimBox.h, 0, 0, tmp.width, tmp.height);
-        
+
         State.tempPhoto = new Image();
         State.tempPhoto.onload = () => {
             els.reviewCanvas.width = tmp.width; els.reviewCanvas.height = tmp.height;
-            ctx.review.clearRect(0,0,tmp.width,tmp.height);
+            ctx.review.clearRect(0, 0, tmp.width, tmp.height);
             ctx.review.drawImage(State.tempPhoto, 0, 0);
             els.reviewOverlay.classList.add('show');
             stopAutoCapture(); // Wait for user decision
@@ -674,7 +673,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     els.captureBtn.onclick = capturePhoto;
-    
+
     els.retakeBtn.onclick = () => {
         els.reviewOverlay.classList.remove('show');
         startAutoCaptureSequence(); // Restart timer for current
@@ -684,13 +683,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const area = State.areas[State.currentAreaIdx];
         area.photo = State.tempPhoto;
         area.photoScale = Math.min(area.bounds.w / State.tempPhoto.width, area.bounds.h / State.tempPhoto.height);
-        
+
         State.currentAreaIdx++;
         if (State.currentAreaIdx >= State.areas.length) {
             goToStep(4);
         } else {
             setupCaptureForCurrentArea();
-            startAutoCaptureSequence(); 
+            startAutoCaptureSequence();
         }
     };
 
@@ -698,18 +697,18 @@ document.addEventListener('DOMContentLoaded', () => {
         els.manualControls.style.display = 'none';
         const idle = els.enableIdle.checked ? parseInt(els.idleTime.value) : 0;
         const count = parseInt(els.countdownTime.value);
-        
+
         if (idle > 0) {
-            els.countdownMessage.textContent = '🕐 Get Ready...'; 
+            els.countdownMessage.textContent = '🕐 Get Ready...';
             els.countdownMessage.classList.remove('countdown-warning');
             els.countdownMessage.style.display = 'block';
-            
+
             let c = idle;
-            els.countdownDisplay.textContent = c; 
+            els.countdownDisplay.textContent = c;
             els.countdownDisplay.classList.remove('countdown-warning');
             els.countdownDisplay.style.opacity = '0.5';
             els.countdownDisplay.style.display = 'block';
-            
+
             State.countInterval = setInterval(() => {
                 c--;
                 if (c > 0) {
@@ -725,23 +724,23 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const doCountdown = (secs) => {
-        els.countdownMessage.textContent = '📸 Smile!'; 
+        els.countdownMessage.textContent = '📸 Smile!';
         els.countdownMessage.classList.add('countdown-warning');
         els.countdownMessage.style.display = 'block';
-        
+
         let c = secs;
-        els.countdownDisplay.textContent = c; 
+        els.countdownDisplay.textContent = c;
         els.countdownDisplay.style.display = 'block';
         els.countdownDisplay.classList.remove('countdown-warning');
         els.countdownDisplay.style.opacity = '1';
-        
+
         State.countInterval = setInterval(() => {
             c--;
             if (c <= 3) els.countdownDisplay.classList.add('countdown-warning');
             if (c > 0) els.countdownDisplay.textContent = c;
             else {
                 clearInterval(State.countInterval);
-                els.countdownMessage.style.display = 'none'; 
+                els.countdownMessage.style.display = 'none';
                 els.countdownDisplay.style.display = 'none';
                 capturePhoto();
             }
@@ -751,7 +750,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const stopAutoCapture = () => {
         clearTimeout(State.autoTimer); clearInterval(State.countInterval);
         State.autoTimer = null;
-        els.countdownMessage.style.display = 'none'; 
+        els.countdownMessage.style.display = 'none';
         els.countdownDisplay.style.display = 'none';
         els.manualControls.style.display = 'flex';
     };
@@ -760,10 +759,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- STEP 4: RESULT ---
     const redrawPhotos = () => {
-        ctx.photo.clearRect(0,0, els.photoCanvas.width, els.photoCanvas.height);
+        ctx.photo.clearRect(0, 0, els.photoCanvas.width, els.photoCanvas.height);
         ctx.photo.imageSmoothingEnabled = true; ctx.photo.imageSmoothingQuality = 'high';
         State.areas.forEach(a => {
-            if(a.photo) ctx.photo.drawImage(a.photo, a.photoX, a.photoY, a.photo.width*a.photoScale, a.photo.height*a.photoScale);
+            if (a.photo) ctx.photo.drawImage(a.photo, a.photoX, a.photoY, a.photo.width * a.photoScale, a.photo.height * a.photoScale);
         });
     };
 
@@ -774,7 +773,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const cx = c.getContext('2d');
         cx.imageSmoothingEnabled = true; cx.imageSmoothingQuality = 'high';
         State.areas.forEach(a => {
-            if(a.photo) cx.drawImage(a.photo, a.photoX*scale, a.photoY*scale, a.photo.width*a.photoScale*scale, a.photo.height*a.photoScale*scale);
+            if (a.photo) cx.drawImage(a.photo, a.photoX * scale, a.photoY * scale, a.photo.width * a.photoScale * scale, a.photo.height * a.photoScale * scale);
         });
         cx.drawImage(els.templateCanvas, 0, 0, els.templateCanvas.width, els.templateCanvas.height, 0, 0, c.width, c.height);
         return new Promise(res => c.toBlob(blob => res(blob), 'image/jpeg', quality));
@@ -792,24 +791,24 @@ document.addEventListener('DOMContentLoaded', () => {
     els.createGifBtn.onclick = () => {
         withLoading('Creating Ultra GIF...', async () => {
             return new Promise((resolve, reject) => {
-                const photos = State.areas.filter(a=>a.photo).sort((a,b)=>a.id-b.id);
-                if(!photos.length) return reject(new Error('No photos'));
-                
+                const photos = State.areas.filter(a => a.photo).sort((a, b) => a.id - b.id);
+                if (!photos.length) return reject(new Error('No photos'));
+
                 const w = els.photoCanvas.width, h = els.photoCanvas.height;
                 const gif = new GIF({ workers: 2, quality: 1, width: w, height: h, workerScript: 'gif.worker.js', background: '#fff' });
-                
+
                 photos.forEach(a => {
                     const c = document.createElement('canvas'); c.width = w; c.height = h;
                     const cx = c.getContext('2d');
-                    cx.fillStyle='#fff'; cx.fillRect(0,0,w,h);
-                    const pAsp = a.photo.width/a.photo.height, cAsp = w/h;
+                    cx.fillStyle = '#fff'; cx.fillRect(0, 0, w, h);
+                    const pAsp = a.photo.width / a.photo.height, cAsp = w / h;
                     let dw, dh, dx, dy;
-                    if(pAsp > cAsp) { dw = w; dh = w/pAsp; dx = 0; dy = (h-dh)/2; }
-                    else { dh = h; dw = h*pAsp; dx = (w-dw)/2; dy = 0; }
+                    if (pAsp > cAsp) { dw = w; dh = w / pAsp; dx = 0; dy = (h - dh) / 2; }
+                    else { dh = h; dw = h * pAsp; dx = (w - dw) / 2; dy = 0; }
                     cx.drawImage(a.photo, dx, dy, dw, dh);
                     gif.addFrame(c, { delay: 1000 });
                 });
-                
+
                 gif.on('finished', blob => {
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a'); a.href = url; a.download = `harves-photobooth-${Date.now()}.gif`;
@@ -823,26 +822,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     els.sendTelegramBtn.onclick = () => {
         if (!State.tgToken || !State.tgChannel) return alert('Admin Note: Telegram Bot Token and Channel Link not configured.');
-        
+
         withLoading('Generating QR Code...', async () => {
-            const blob = await generateHighResCanvas(96, 0.85); 
+            const blob = await generateHighResCanvas(96, 0.85);
             const fd = new FormData();
-            
+
             let chatId = State.tgChannel;
             if (chatId.includes('t.me/')) chatId = '@' + chatId.split('/').pop();
             if (chatId.includes('/s/')) chatId = '@' + chatId.split('/s/').pop();
 
             fd.append('chat_id', chatId); fd.append('photo', blob, 'photobooth.jpg');
-            
+
             const res = await fetch(`https://api.telegram.org/bot${State.tgToken}/sendPhoto`, { method: 'POST', body: fd });
             const data = await res.json();
-            
+
             if (data.ok) {
                 const photos = data.result.photo;
                 const fileId = photos[photos.length - 1].file_id;
                 const fileRes = await fetch(`https://api.telegram.org/bot${State.tgToken}/getFile?file_id=${fileId}`);
                 const fileData = await fileRes.json();
-                
+
                 if (fileData.ok) {
                     const filePath = fileData.result.file_path;
                     const directUrl = `https://api.telegram.org/file/bot${State.tgToken}/${filePath}`;
