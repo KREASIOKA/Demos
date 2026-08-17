@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
         autoTimer: null,
         tgToken: localStorage.getItem('tgToken') || '',
         tgChannel: localStorage.getItem('tgChannel') || '',
+        baseUrl: localStorage.getItem('baseUrl') || '',
         templates: [], // From IndexedDB
         activeTemplateId: null,
         mockupImages: [],
@@ -40,6 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
         settingsModal: new bootstrap.Modal($('settingsModal')),
         tgBotTokenInput: $('telegramBotToken'),
         tgChannelInput: $('telegramChannelLink'),
+        baseUrlInput: $('hostingBaseUrl'),
         saveSettingsBtn: $('saveSettings'),
         factoryResetBtn: $('factoryResetBtn'),
 
@@ -321,12 +323,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- ADMIN SETTINGS & TEMPLATE UPLOAD ---
     els.settingsBtn.onclick = () => {
         els.tgBotTokenInput.value = State.tgToken; els.tgChannelInput.value = State.tgChannel;
+        els.baseUrlInput.value = State.baseUrl;
         els.templatePreviewSection.style.display = 'none';
         els.settingsModal.show();
     };
     els.saveSettingsBtn.onclick = () => {
         State.tgToken = els.tgBotTokenInput.value.trim(); State.tgChannel = els.tgChannelInput.value.trim();
+        State.baseUrl = els.baseUrlInput.value.trim();
         localStorage.setItem('tgToken', State.tgToken); localStorage.setItem('tgChannel', State.tgChannel);
+        localStorage.setItem('baseUrl', State.baseUrl);
         els.settingsModal.hide();
         updateMirror();
     };
@@ -844,9 +849,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (fileData.ok) {
                     const filePath = fileData.result.file_path;
-                    const directUrl = `https://api.telegram.org/file/bot${State.tgToken}/${filePath}`;
+                    let finalUrl = `https://api.telegram.org/file/bot${State.tgToken}/${filePath}`;
+                    
+                    if (State.baseUrl) {
+                        const dataString = btoa(JSON.stringify({ t: State.tgToken, p: filePath }));
+                        let base = State.baseUrl;
+                        if (!base.endsWith('/')) base += '/';
+                        finalUrl = `${base}download.html#data=${dataString}`;
+                    }
+
                     els.qrCodeContainer.innerHTML = '';
-                    const qr = qrcode(0, 'M'); qr.addData(directUrl); qr.make();
+                    const qr = qrcode(0, 'M'); qr.addData(finalUrl); qr.make();
                     els.qrCodeContainer.innerHTML = qr.createImgTag(5, 0);
                     els.qrSection.style.display = 'block';
                 } else throw new Error("Failed to get direct file path from Telegram.");
