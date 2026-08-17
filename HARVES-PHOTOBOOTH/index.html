@@ -4,157 +4,96 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>HARVES Photobooth</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
     <link rel="stylesheet" href="interface.css">
     <script src="gif.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
-    <!-- Use localForage for easy IndexedDB wrapper -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.10.0/localforage.min.js"></script>
 </head>
 <body>
     <div class="app-container">
-        <!-- Header / Step Indicator -->
-        <header class="app-header">
-            <div class="brand">
-                <img src="https://harau.org/wp-content/uploads/2018/03/Small-Logo-Harau-Valley-English-School-Background.png" alt="HARVES Logo" class="brand-logo">
-                <div class="brand-name">Photobooth</div>
-            </div>
-            <div class="step-bar">
-                <div class="step-item active" data-step="1">
-                    <div class="step-num">1</div><span class="step-label">Setup</span>
-                </div>
-                <div class="step-line"></div>
-                <div class="step-item" data-step="2">
-                    <div class="step-num">2</div><span class="step-label">Capture</span>
-                </div>
-                <div class="step-line"></div>
-                <div class="step-item" data-step="3">
-                    <div class="step-num">3</div><span class="step-label">Result</span>
-                </div>
-            </div>
-            <div class="header-actions">
-                <button class="icon-btn settings-toggle" id="settingsBtn" title="Settings">
-                    <i class="bi bi-gear-fill"></i>
-                </button>
-            </div>
-        </header>
+        <!-- Floating Settings Button (Admin) -->
+        <button class="icon-btn settings-floating" id="settingsBtn" title="Admin Settings">
+            <i class="bi bi-gear-fill"></i>
+        </button>
 
-        <!-- ==================== STEP 1: SETUP ==================== -->
-        <div class="step-content active" id="step1">
-            <div class="setup-layout">
-                <div class="canvas-slot" id="setupCanvasSlot">
-                    <div class="canvas-container" id="canvasArea">
-                        <canvas id="photoCanvas"></canvas>
-                        <canvas id="templateCanvas"></canvas>
-                        <div class="canvas-empty" id="canvasEmpty">
-                            <i class="bi bi-image"></i>
-                            <p>Load a template to begin</p>
-                        </div>
+        <!-- ==================== STEP 0: WELCOME ==================== -->
+        <div class="step-content active" id="step0">
+            <div class="welcome-screen">
+                <div class="welcome-content">
+                    <img src="https://harau.org/wp-content/uploads/2018/03/Small-Logo-Harau-Valley-English-School-Background.png" alt="HARVES Logo" class="welcome-logo">
+                    <h1 class="welcome-title">HARVES PHOTOBOOTH</h1>
+                    <p class="welcome-tagline">Capture Your Best Moments Instantly</p>
+                    <button class="action-btn primary large-btn pulse-glow mt-4" id="btnStartApp">
+                        START PHOTOBOOTH <i class="bi bi-arrow-right ms-2"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== STEP 1: TEMPLATE LIBRARY ==================== -->
+        <div class="step-content" id="step1">
+            <div class="fullscreen-layout">
+                <div class="step-header">
+                    <h2>Select a Frame</h2>
+                    <p>Choose your favorite template to begin</p>
+                </div>
+                <div class="template-gallery-large" id="templateGallery">
+                    <!-- Thumbnails will be injected here via JS -->
+                </div>
+                <div class="step-footer">
+                    <button class="action-btn outline me-3" id="btnBackToWelcome">Back</button>
+                    <button class="action-btn primary large-btn" id="btnContinueToTimer" disabled>Continue <i class="bi bi-chevron-right ms-2"></i></button>
+                </div>
+            </div>
+            <!-- Hidden canvas for thumbnail logic and temp drawing -->
+            <div class="d-none">
+                <canvas id="photoCanvas"></canvas>
+                <canvas id="templateCanvas"></canvas>
+            </div>
+        </div>
+
+        <!-- ==================== STEP 2: TIMER SETTINGS ==================== -->
+        <div class="step-content" id="step2">
+            <div class="fullscreen-layout centered-layout">
+                <div class="glass-card timer-card">
+                    <h2><i class="bi bi-stopwatch me-2"></i> Capture Settings</h2>
+                    <p class="text-muted mb-4">Set your preparation and capture timers.</p>
+                    
+                    <div class="setting-row">
+                        <label>Enable Idle</label>
+                        <input type="checkbox" id="enableIdleTime" checked>
                     </div>
-                </div>
-                <div class="setup-sidebar glass-panel">
-                    <div class="sidebar-scroll">
-                        
-                        <!-- Template Library -->
-                        <section class="panel-card">
-                            <h3><i class="bi bi-collection"></i> Template Library</h3>
-                            <div class="template-gallery" id="templateGallery">
-                                <!-- Thumbnails will be injected here via JS -->
-                            </div>
-                            <button class="action-btn outline mt-2" id="loadImageBtn">
-                                <i class="bi bi-cloud-upload"></i> Upload New Template
-                            </button>
-                            <input type="file" id="imageInput" accept="image/*" class="d-none">
-                        </section>
-
-                        <!-- Chroma Key -->
-                        <section class="panel-card" id="chromaSection" style="display:none;">
-                            <h3><i class="bi bi-palette2"></i> Chroma Key Config</h3>
-                            <div class="setting-row">
-                                <label>Color</label>
-                                <input type="color" id="chromaColor" value="#00ff00">
-                            </div>
-                            <div class="setting-row">
-                                <label>Tolerance</label>
-                                <input type="range" id="tolerance" min="0" max="100" value="20">
-                                <span class="rv" id="toleranceValue">20</span>
-                            </div>
-                            <div class="setting-row">
-                                <label>Min Area</label>
-                                <input type="range" id="minArea" min="100" max="5000" value="500" step="100">
-                                <span class="rv" id="minAreaValue">500</span>
-                            </div>
-                            <div class="setting-row">
-                                <label>Feathering</label>
-                                <input type="range" id="feathering" min="0" max="10" value="2">
-                                <span class="rv" id="featheringValue">2</span>
-                            </div>
-                            <button class="action-btn primary" id="detectAreasBtn">
-                                <i class="bi bi-magic"></i> Detect & Save Template
-                            </button>
-                        </section>
-
-                        <!-- Camera -->
-                        <section class="panel-card">
-                            <h3><i class="bi bi-camera-video"></i> Camera</h3>
-                            <div class="setting-row">
-                                <label>Device</label>
-                                <select id="cameraSelect" class="sel"><option value="">Select Camera</option></select>
-                            </div>
-                            <div class="setting-row">
-                                <label>Resolution</label>
-                                <select id="resolutionSelect" class="sel">
-                                    <option value="640x480">640×480</option>
-                                    <option value="1280x720" selected>1280×720 HD</option>
-                                    <option value="1920x1080">1920×1080 FHD</option>
-                                </select>
-                            </div>
-                            <div class="setting-row">
-                                <label>Mirror</label>
-                                <input type="checkbox" id="mirrorCamera" checked>
-                            </div>
-                            <button class="action-btn success" id="startCameraBtn">
-                                <i class="bi bi-camera-video-fill"></i> Start Camera
-                            </button>
-                        </section>
-
-                        <!-- Capture Timing -->
-                        <section class="panel-card">
-                            <h3><i class="bi bi-stopwatch"></i> Timing</h3>
-                            <div class="setting-row">
-                                <label>Idle Time</label>
-                                <input type="checkbox" id="enableIdleTime" checked>
-                            </div>
-                            <div class="setting-row" id="idleTimeRow">
-                                <label>Idle (s)</label>
-                                <input type="range" id="idleTime" min="3" max="30" value="10">
-                                <span class="rv" id="idleTimeValue">10</span>
-                            </div>
-                            <div class="setting-row">
-                                <label>Countdown</label>
-                                <input type="range" id="countdownTime" min="1" max="10" value="3">
-                                <span class="rv" id="countdownTimeValue">3</span>
-                            </div>
-                        </section>
+                    <div class="setting-row" id="idleTimeRow">
+                        <label>Idle Time (s)</label>
+                        <input type="range" id="idleTime" min="3" max="30" value="10">
+                        <span class="rv" id="idleTimeValue">10</span>
+                    </div>
+                    <hr class="glass-divider">
+                    <div class="setting-row">
+                        <label>Countdown</label>
+                        <input type="range" id="countdownTime" min="1" max="10" value="3">
+                        <span class="rv" id="countdownTimeValue">3</span>
                     </div>
 
-                    <div class="sidebar-footer">
-                        <button class="nav-btn primary" id="goToCapture" disabled>
-                            Start Capture <i class="bi bi-arrow-right"></i>
+                    <div class="d-flex gap-3 mt-5">
+                        <button class="action-btn outline" id="btnBackToTemplate">Back</button>
+                        <button class="action-btn success large-btn" id="btnStartCapture">
+                            Start Capture <i class="bi bi-camera-fill ms-2"></i>
                         </button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- ==================== STEP 2: CAPTURE ==================== -->
-        <div class="step-content" id="step2">
+        <!-- ==================== STEP 3: CAPTURE ==================== -->
+        <div class="step-content" id="step3">
             <div class="capture-layout">
                 <div class="capture-top-bar glass-pill">
-                    <button class="icon-btn dark-btn" id="backToSetup"><i class="bi bi-arrow-left"></i></button>
+                    <button class="icon-btn dark-btn" id="backToTimer" title="Back to Timer"><i class="bi bi-arrow-left"></i></button>
+                    <button class="icon-btn dark-btn ms-2" id="retakeAllBtn" title="Retake All"><i class="bi bi-arrow-counterclockwise"></i></button>
                     <div class="capture-progress" id="captureProgress">Photo 1 of 3</div>
                     <div class="capture-area-info" id="captureAreaInfo"></div>
                 </div>
@@ -165,15 +104,13 @@
                     <div class="countdown-message" id="countdownMessage"></div>
                     <div class="flash-overlay" id="flashOverlay"></div>
                 </div>
-                <div class="capture-bottom-bar glass-pill-bottom">
+                <!-- Controls for manual intervention (hidden during auto) -->
+                <div class="capture-bottom-bar glass-pill-bottom" style="display:none" id="manualControls">
                     <button class="action-btn outline small dark-btn" id="autoCaptureBtn">
-                        <i class="bi bi-play-circle"></i> Auto
+                        <i class="bi bi-play-circle"></i> Resume Auto
                     </button>
                     <button class="capture-btn" id="captureBtn" title="Capture Photo">
                         <div class="capture-btn-inner"></div>
-                    </button>
-                    <button class="action-btn outline small dark-btn" id="stopAutoCaptureBtn" style="display:none">
-                        <i class="bi bi-stop-circle"></i> Stop
                     </button>
                 </div>
 
@@ -202,62 +139,163 @@
             </div>
         </div>
 
-        <!-- ==================== STEP 3: RESULT ==================== -->
-        <div class="step-content" id="step3">
-            <div class="result-layout">
-                <div class="canvas-slot" id="resultCanvasSlot"></div>
-                <div class="result-sidebar glass-panel">
-                    <div class="sidebar-scroll">
-                        <section class="panel-card congrats">
-                            <div class="congrats-icon"><i class="bi bi-check-circle-fill"></i></div>
-                            <h3>All Photos Captured!</h3>
-                            <p class="info-text">Export or share your result below.</p>
-                        </section>
+        <!-- ==================== STEP 4: RESULT ==================== -->
+        <div class="step-content" id="step4">
+            <div class="fullscreen-layout">
+                <div class="step-header text-center">
+                    <h2 class="text-success"><i class="bi bi-check-circle-fill me-2"></i> Looking Good!</h2>
+                    <p>Share or download your moments</p>
+                </div>
+                
+                <div class="result-center">
+                    <div class="canvas-container" id="resultCanvasSlot">
+                        <!-- Canvas will be moved here -->
+                    </div>
+                </div>
 
-                        <section class="panel-card">
-                            <h3><i class="bi bi-share"></i> Actions</h3>
-                            <div class="action-grid">
-                                <button class="action-btn primary" id="exportBtn">
-                                    <i class="bi bi-download"></i> Export Image
-                                </button>
-                                <button class="action-btn gif-btn" id="createGifBtn">
-                                    <i class="bi bi-filetype-gif"></i> Create GIF
-                                </button>
-                                <button class="action-btn telegram-btn" id="sendTelegramBtn">
-                                    <i class="bi bi-telegram"></i> Send to Telegram
-                                </button>
-                            </div>
-                        </section>
-
-                        <!-- QR Code Section -->
-                        <section class="panel-card qr-card" id="qrSection" style="display:none">
-                            <h3><i class="bi bi-qr-code"></i> Scan to Download</h3>
-                            <div class="qr-container" id="qrCodeContainer"></div>
-                            <p class="qr-url" id="qrUrl"></p>
-                        </section>
+                <div class="result-actions glass-panel-horizontal">
+                    <div class="d-flex gap-3 justify-content-center mb-3">
+                        <button class="action-btn telegram-btn" id="sendTelegramBtn">
+                            <i class="bi bi-qr-code-scan"></i> Generate QR Code
+                        </button>
+                        <button class="action-btn gif-btn" id="createGifBtn">
+                            <i class="bi bi-filetype-gif"></i> Create GIF
+                        </button>
+                        <button class="action-btn primary" id="exportBtn">
+                            <i class="bi bi-download"></i> Save Image
+                        </button>
                     </div>
 
-                    <div class="sidebar-footer">
-                        <button class="nav-btn outline" id="backToCapture">
-                            <i class="bi bi-arrow-left"></i> Retake
-                        </button>
-                        <button class="nav-btn danger" id="resetAllBtn">
-                            <i class="bi bi-arrow-clockwise"></i> New Session
-                        </button>
+                    <!-- QR Code Section -->
+                    <div class="qr-card" id="qrSection" style="display:none">
+                        <div class="qr-container" id="qrCodeContainer"></div>
+                        <p class="qr-url mt-2" id="qrUrl">Scan to View Photo</p>
+                    </div>
+
+                    <div class="d-flex justify-content-center mt-4">
+                        <button class="action-btn outline me-3" id="backToCaptureBtn"><i class="bi bi-arrow-left"></i> Retake Photos</button>
+                        <button class="action-btn danger" id="resetAllBtn"><i class="bi bi-arrow-clockwise"></i> Start Over</button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Status Bar -->
-        <div class="status-bar">
-            <span id="statusText">Ready — Select a template to begin</span>
-        </div>
     </div>
 
     <!-- ==================== MODALS ==================== -->
+    <!-- Settings Modal -->
+    <div class="modal fade" id="settingsModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content mac-window">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="bi bi-gear"></i> Admin Settings</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Template Management -->
+                    <h6 class="mb-3"><i class="bi bi-cloud-arrow-up"></i> Template Management</h6>
+                    <div class="d-flex gap-3 mb-3">
+                        <button class="btn btn-outline-primary" id="loadImageBtn">
+                            <i class="bi bi-image"></i> Load Image
+                        </button>
+                        <input type="file" id="imageInput" accept="image/*" class="d-none">
+                    </div>
+                    
+                    <div id="templatePreviewSection" style="display:none;" class="mb-4">
+                        <div class="canvas-preview-box">
+                            <canvas id="previewCanvasSettings" style="max-width:100%; max-height:300px; border:1px solid #ccc;"></canvas>
+                        </div>
+                        <p class="text-muted mt-2 small" id="templateStatusText">Loaded successfully.</p>
+                        
+                        <!-- Chroma Settings (Hidden if PNG has alpha holes) -->
+                        <div id="chromaSettings" style="display:none;" class="card p-3 mb-3 bg-light">
+                            <label class="form-label fw-bold">Chroma Key Config (Solid BG detected)</label>
+                            <div class="row g-2">
+                                <div class="col-6">
+                                    <label class="form-label small">Color</label>
+                                    <input type="color" class="form-control form-control-color w-100" id="chromaColor" value="#00ff00">
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label small d-flex justify-content-between">Tolerance <span id="toleranceValue">20</span></label>
+                                    <input type="range" class="form-range" id="tolerance" min="0" max="100" value="20">
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label small d-flex justify-content-between">Min Area <span id="minAreaValue">500</span></label>
+                                    <input type="range" class="form-range" id="minArea" min="100" max="5000" value="500" step="100">
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label small d-flex justify-content-between">Feathering <span id="featheringValue">2</span></label>
+                                    <input type="range" class="form-range" id="feathering" min="0" max="10" value="2">
+                                </div>
+                            </div>
+                        </div>
 
-    <!-- Export Modal -->
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-warning" id="btnDetectPreview">Test Detect Areas</button>
+                            <button class="btn btn-success" id="btnSaveTemplatePreview" disabled>Save to Library</button>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <!-- Camera -->
+                    <h6 class="mb-3"><i class="bi bi-camera-video"></i> Camera Device</h6>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label small">Device</label>
+                            <select id="cameraSelect" class="form-select"><option value="">Select Camera</option></select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small">Resolution</label>
+                            <select id="resolutionSelect" class="form-select">
+                                <option value="640x480">640×480</option>
+                                <option value="1280x720" selected>1280×720 HD</option>
+                                <option value="1920x1080">1920×1080 FHD</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2 d-flex align-items-end">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="mirrorCamera" checked>
+                                <label class="form-check-label small">Mirror</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <hr>
+
+                    <!-- Telegram Integration -->
+                    <h6 class="mb-3"><i class="bi bi-telegram"></i> Telegram API</h6>
+                    <div class="mb-3">
+                        <label class="form-label small">Bot Token</label>
+                        <input type="text" class="form-control" id="telegramBotToken" placeholder="123456:ABC-DEF...">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small">Channel Link</label>
+                        <input type="text" class="form-control" id="telegramChannelLink" placeholder="https://t.me/s/yourchannel">
+                    </div>
+
+                    <hr class="mt-4 mb-4">
+                    
+                    <!-- Danger Zone -->
+                    <h6 class="mb-3 text-danger"><i class="bi bi-exclamation-triangle"></i> Danger Zone</h6>
+                    <div class="d-flex justify-content-between align-items-center bg-light p-3 rounded border border-danger border-opacity-25">
+                        <div>
+                            <strong class="d-block text-danger mb-1">Factory Reset</strong>
+                            <span class="small text-muted">Deletes all templates, settings, and requires camera permission again.</span>
+                        </div>
+                        <button class="btn btn-outline-danger" id="factoryResetBtn">Reset All Data</button>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="saveSettings">Save Global Settings</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Modal (unchanged just for safety) -->
     <div class="modal fade" id="exportModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content mac-window">
@@ -278,89 +316,10 @@
                             <option value="1200">1200 DPI</option>
                         </select>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Compression</label>
-                        <div class="d-flex gap-2">
-                            <button type="button" class="btn btn-outline-primary active" data-quality="1.0">Best</button>
-                            <button type="button" class="btn btn-outline-primary" data-quality="0.95">High</button>
-                            <button type="button" class="btn btn-outline-primary" data-quality="0.9">Good</button>
-                        </div>
-                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
                     <button type="button" class="btn btn-primary" id="confirmExport">Export</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- GIF Modal -->
-    <div class="modal fade" id="gifExportModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content mac-window">
-                <div class="modal-header">
-                    <h5 class="modal-title">Create GIF</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label">File Name</label>
-                        <input type="text" class="form-control" id="gifFileName" value="photo-slideshow">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Frame Duration (ms)</label>
-                        <input type="number" class="form-control" id="gifFrameDuration" value="1000" min="100" max="5000">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Quality</label>
-                        <select class="form-select" id="gifQuality">
-                            <option value="1">Ultra</option>
-                            <option value="5" selected>High</option>
-                            <option value="10">Balanced</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Dimensions</label>
-                        <div class="input-group">
-                            <input type="number" class="form-control" id="gifWidth" value="800">
-                            <span class="input-group-text">×</span>
-                            <input type="number" class="form-control" id="gifHeight" value="600">
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" id="confirmGifExport">Create GIF</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Settings Modal (Telegram) -->
-    <div class="modal fade" id="settingsModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content mac-window">
-                <div class="modal-header">
-                    <h5 class="modal-title"><i class="bi bi-gear"></i> Settings</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <h6 class="mb-3"><i class="bi bi-telegram"></i> Telegram Integration</h6>
-                    <div class="mb-3">
-                        <label class="form-label">Bot Token</label>
-                        <input type="text" class="form-control" id="telegramBotToken" placeholder="123456:ABC-DEF...">
-                        <div class="form-text">Get from @BotFather on Telegram</div>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Channel Link</label>
-                        <input type="text" class="form-control" id="telegramChannelLink" placeholder="https://t.me/s/yourchannel">
-                        <div class="form-text">Public channel link with /s/ format</div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" id="saveSettings">Save</button>
                 </div>
             </div>
         </div>
@@ -372,9 +331,7 @@
         <p id="loadingText" class="fw-semibold">Processing...</p>
     </div>
 
-    <script src="LICENSE.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
     <script src="main.js"></script>
 </body>
 </html>
