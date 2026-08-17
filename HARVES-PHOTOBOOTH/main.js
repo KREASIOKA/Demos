@@ -772,7 +772,15 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const generateHighResCanvas = (dpi, quality) => {
-        const scale = dpi / 96;
+        let scale = dpi / 96;
+        
+        // Capping the maximum resolution to prevent browser Out-Of-Memory (TypeError on createObjectURL)
+        const maxDimension = 4000;
+        const currentMax = Math.max(els.templateCanvas.width, els.templateCanvas.height);
+        if (currentMax * scale > maxDimension) {
+            scale = maxDimension / currentMax;
+        }
+
         const c = document.createElement('canvas');
         c.width = els.templateCanvas.width * scale; c.height = els.templateCanvas.height * scale;
         const cx = c.getContext('2d');
@@ -781,12 +789,16 @@ document.addEventListener('DOMContentLoaded', () => {
             if (a.photo) cx.drawImage(a.photo, a.photoX * scale, a.photoY * scale, a.photo.width * a.photoScale * scale, a.photo.height * a.photoScale * scale);
         });
         cx.drawImage(els.templateCanvas, 0, 0, els.templateCanvas.width, els.templateCanvas.height, 0, 0, c.width, c.height);
-        return new Promise(res => c.toBlob(blob => res(blob), 'image/jpeg', quality));
+        
+        return new Promise((res, rej) => c.toBlob(blob => {
+            if (blob) res(blob);
+            else rej(new Error("Browser ran out of memory. Try refreshing the page."));
+        }, 'image/jpeg', quality));
     };
 
     els.exportBtn.onclick = () => {
         withLoading('Saving image...', async () => {
-            const blob = await generateHighResCanvas(600, 1.0);
+            const blob = await generateHighResCanvas(192, 0.95);
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a'); a.href = url; a.download = `harves-photobooth-${Date.now()}.jpg`;
             a.click(); URL.revokeObjectURL(url);
