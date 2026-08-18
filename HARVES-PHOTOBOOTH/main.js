@@ -265,7 +265,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const renderTemplateGallery = () => {
         if (State.templates.length === 0) {
-            els.templateGallery.innerHTML = '<div class="text-muted w-100 text-center" style="padding:60px 20px"><i class="bi bi-images" style="font-size:3rem;display:block;margin-bottom:12px"></i>No templates yet.<br>Upload via <b>Settings</b> (⚙️).</div>';
+            els.templateGallery.innerHTML = '<div class="text-muted w-100 text-center" style="padding:60px 20px"><i class="bi bi-images" style="font-size:3rem;display:block;margin-bottom:12px"></i>No templates yet.<br>Upload via <b>Settings</b> (<i class="bi bi-gear-fill"></i>).</div>';
             els.btnContinueToTimer.disabled = true;
             return;
         }
@@ -715,7 +715,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const count = parseInt(els.countdownTime.value);
 
         if (idle > 0) {
-            els.countdownMessage.textContent = '🕐 Get Ready...';
+            els.countdownMessage.innerHTML = '<i class="bi bi-clock-history me-1"></i> Get Ready...';
             els.countdownMessage.classList.remove('countdown-warning');
             els.countdownMessage.style.display = 'block';
 
@@ -729,7 +729,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 c--;
                 if (c > 0) {
                     els.countdownDisplay.textContent = c;
-                    els.countdownMessage.textContent = `🕐 Get Ready... (${c}s)`;
+                    els.countdownMessage.innerHTML = `<i class="bi bi-clock-history me-1"></i> Get Ready... (${c}s)`;
                 } else {
                     clearInterval(State.countInterval);
                     els.countdownDisplay.style.opacity = '1';
@@ -740,7 +740,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const doCountdown = (secs) => {
-        els.countdownMessage.textContent = '📸 Smile!';
+        els.countdownMessage.innerHTML = '<i class="bi bi-camera-fill me-1"></i> Smile!';
         els.countdownMessage.classList.add('countdown-warning');
         els.countdownMessage.style.display = 'block';
 

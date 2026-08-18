@@ -437,3 +437,30 @@ input[type="checkbox"]:checked::after {
 	.template-gallery-large { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
 	.fullscreen-layout { padding: 20px 28px; }
 }
+
+/* ========== INSTAGRAM REMINDER BADGE ========== */
+.instagram-reminder {
+	margin-top: 14px;
+	margin-bottom: 14px;
+}
+.ig-badge {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+	color: #ffffff;
+	padding: 8px 20px;
+	border-radius: 50px;
+	font-size: 0.9rem;
+	font-weight: 500;
+	box-shadow: 0 4px 14px rgba(220, 39, 67, 0.3);
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.ig-badge:hover {
+	transform: translateY(-1px);
+	box-shadow: 0 6px 18px rgba(220, 39, 67, 0.4);
+}
+.ig-badge strong {
+	font-weight: 700;
+	margin: 0 5px;
+}
